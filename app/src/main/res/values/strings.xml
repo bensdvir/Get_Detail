@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">RealEstateNetwork</string>
+    <string name="facebook_app_id">145918089527786</string>
+    <string name="fb_login_protocol_scheme">fb145918089527786</string>
+    <string name="rooms_prompt">Choose number of rooms</string>
+
+
+    <string-array name="rooms_arrays">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
+</resources>
+
