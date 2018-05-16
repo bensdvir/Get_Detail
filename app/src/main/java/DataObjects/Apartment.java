@@ -1,8 +1,9 @@
 package DataObjects;
 
 
+import java.io.Serializable;
 
-public class Apartment {
+public class Apartment  implements Serializable {
 
     private String address;
     private String landLordID;

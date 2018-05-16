@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RealEstateNetwork</string>
+    <string name="app_name">Real Estate\nNetwork</string>
     <string name="facebook_app_id">145918089527786</string>
     <string name="fb_login_protocol_scheme">fb145918089527786</string>
     <string name="rooms_prompt">Choose number of rooms</string>

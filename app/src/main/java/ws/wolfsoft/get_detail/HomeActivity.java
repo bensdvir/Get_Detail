@@ -14,18 +14,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -38,11 +32,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import Communication.Communication;
 import DataObjects.Apartment;
+import DataObjects.User;
 
 public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallback {
     private static final String TAG = "";
@@ -83,7 +79,8 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
                 //locButton.setClickable(false);
                 if (ActivityCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(HomeActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                }else
+                }
+                else
                 {
                     if(canGetLocation()) {
 
@@ -91,46 +88,23 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                Location lastKnownLocation  = getLastKnownLocation();
-                                LatLng newLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                                mMap.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
-                                mMap.animateCamera(CameraUpdateFactory.zoomTo(17.4f));                            }
-                        }, 1000);
-                        //locButton.setClickable(true);
-
-
-                        /*Runnable r = new Runnable(){
-                            public void run() {
                                 try {
-                                    wait(2000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
+                                    Location lastKnownLocation = getLastKnownLocation();
+                                    LatLng newLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
+                                    mMap.animateCamera(CameraUpdateFactory.zoomTo(17.4f));
                                 }
-                                Location lastKnownLocation  = getLastKnownLocation();
-                                LatLng newLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                                try {
-                                    wait(5000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                mMap.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
-                                mMap.animateCamera(CameraUpdateFactory.zoomTo(17.4f));
+                            catch (Exception e){
+
+                                HomeActivity.this.runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(HomeActivity.this, "Can't get location", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
-                        };
-                        runOnUiThread(r);
-                        */
+                            }
+                        }, 1000);
 
-                       /* Handler mainHandler = new Handler(Looper.getMainLooper());
-                        Runnable myRunnable = new Runnable() {
-                            @Override
-                            public void run() {
-                                Location lastKnownLocation  = getLastKnownLocation();
-                                LatLng newLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                                mMap.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
-                                mMap.animateCamera(CameraUpdateFactory.zoomTo(17.4f));} // This is your code
-                        };
-                        mainHandler.post(myRunnable);
-                        */
 
                     }
                     else{
@@ -144,106 +118,92 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
             }
         });
 
+        HomeActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
 
-        android.support.v7.widget.Toolbar tb = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
-        LinearLayout profileLayout  = (LinearLayout) tb.findViewById(R.id.profileLayout);
-        LinearLayout logoutLayout  = (LinearLayout) tb.findViewById(R.id.logoutLayout);
-        LinearLayout searchLayout  = (LinearLayout) tb.findViewById(R.id.searchLayout);
+                android.support.v7.widget.Toolbar tb = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+            LinearLayout profileLayout = (LinearLayout) tb.findViewById(R.id.profileLayout);
+            LinearLayout logoutLayout = (LinearLayout) tb.findViewById(R.id.logoutLayout);
+            LinearLayout searchLayout = (LinearLayout) tb.findViewById(R.id.searchLayout);
 
-        searchLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (preesed){
-                    mPopupWindow.dismiss();
-                    preesed = false;
-                    return;
+        searchLayout.setOnClickListener(new View.OnClickListener()
+
+            {
+                @Override
+                public void onClick (View view){
+                Intent intent = new Intent(getBaseContext(), SearchActivity.class);
+                Bundle bundle = new Bundle();
+                int i = 0;
+                for (Apartment ap : ans) {
+                    intent.putExtra("ap" + i, ap);
+                    i += 1;
                 }
-                LayoutInflater inflater = (LayoutInflater) HomeActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
-
-                View customView = inflater.inflate(R.layout.custom_layout,null);
-                Spinner spinner = (Spinner) customView.findViewById(R.id.rooms_spinner);
-// Create an ArrayAdapter using the string array and a default spinner layout
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(HomeActivity.this,
-                        R.array.rooms_arrays, android.R.layout.simple_spinner_dropdown_item);
-// Specify the layout to use when the list of choices appears
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
-                spinner.setAdapter(adapter);
-                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                      @Override
-                                                      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                                                      }
-
-                                                      @Override
-                                                      public void onNothingSelected(AdapterView<?> parent) {
-
-                                                      }
-
-                                                  });
-
-                Spinner spinnerFloor = (Spinner) customView.findViewById(R.id.floor_spinner);
-                spinnerFloor.setAdapter(adapter);
-                spinnerFloor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-
-                });
-
-                    // An item was selected. You can retrieve the selected item using
-                    // parent.getItemAtPosition(pos)
-
-                /*Button b = customView.findViewById(R.id.anonymus_button);
-                b.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-                        startActivity(intent);
-                    }
-                    });
-*/
-                mPopupWindow = new PopupWindow(
-                        customView,
-                        1200,
-                        1900
-                );
-                RelativeLayout mRelativeLayout = (RelativeLayout) findViewById(R.id.drawer_layout);
-                preesed = true;
-                mPopupWindow.showAtLocation(mRelativeLayout, Gravity.CENTER,0,0);
-
-            }
-        });
+                bundle.putInt("apartmentsNum", ans.size());
+                intent.putExtras(bundle);
+                    try {
+                        startActivity(intent);}
+                    catch (Exception e){}            }
+            });
 
 
-        profileLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        profileLayout.setOnClickListener(new View.OnClickListener()
+
+            {
+                @Override
+                public void onClick (View view){
                 Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
                 Bundle facebookData = getIntent().getExtras();
-                Bundle b = new Bundle();
-               // b.putString("idFacebook", LoginActivity.sessionId);
-                intent.putExtras(facebookData);
-                startActivity(intent);
-            }
-        });
+                facebookData.putString("isProfile","yes");
+                    // b.putString("idFacebook", LoginActivity.sessionId);
+                    try {
+                        new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                HashMap<String, String> header = new HashMap<String, String>();
+                                header.put("token", facebookData.getString("sessionId"));
+                                User response = Communication.makeGetRequest(Communication.ip + "/user/getByToken", header, User.class);
+                                //Bundle b = userToBundle(response);
+                                User user = response;
+                                Bundle b = new Bundle();
+                                b.putString("email", user.getEmail());
+                                b.putString("firstName", user.getFirstName());
+                                b.putString("gender", user.getGender());
+                                b.putString("image", user.getImage());
+                                b.putString("lastName", user.getLastName());
+                                b.putString("token", user.getToken());
+                                b.putString("isProfile", "yes");
+                                b.putString("sessionId", facebookData.getString("sessionId"));
+                                intent.putExtras(b);
+                                startActivity(intent);
+                                return null;
+                            }
+                        }.execute();
+                    }
+                    catch (Exception e){
+                        HomeActivity.this.runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(HomeActivity.this, "Some bug", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-        logoutLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+
+                    }            }
+            });
+
+        logoutLayout.setOnClickListener(new View.OnClickListener()
+
+            {
+                @Override
+                public void onClick (View view){
                 Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-                if(getIntent().getExtras().containsKey("sessionId")) {
+                if (getIntent().getExtras().containsKey("sessionId")) {
                     LoginManager.getInstance().logOut();
                 }
-                startActivity(intent);
-            }
-        });
+                    try {
+                        startActivity(intent);}
+                    catch (Exception e){}            }
+            });
+        }});
     }
 
     public void onMapReady(GoogleMap googleMap) {
@@ -255,10 +215,27 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
         mMap.moveCamera(CameraUpdateFactory.newLatLng(home));
         //mMap.addMarker(new MarkerOptions().position(home).title("Marker in Home"));
 
-        List<Apartment> result = getAllApartmentsFromServer();
-        while(ans==null){
-        }
-        setApartmentsOnMap(ans);
+        HomeActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+
+                List<Apartment> result = getAllApartmentsFromServer();
+                while (ans == null) {
+                }
+
+                if (!getIntent().getExtras().containsKey("isInSearch")) {
+                    setApartmentsOnMap(ans);
+                } else {
+                    int numAp = getIntent().getExtras().getInt("apartmentsNum");
+                    List<Apartment> allResults = new ArrayList<Apartment>();
+                    for (int i = 0; i < numAp; i++) {
+                        Apartment tmp = (Apartment) getIntent().getExtras().get("ap" + i);
+                        allResults.add(tmp);
+                    }
+
+                    setApartmentsOnMap(allResults);
+                }
+            }
+        });
 
         mMap.animateCamera( CameraUpdateFactory.zoomTo( 15.0f ) );
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
@@ -266,17 +243,10 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
 
             @Override
             public void onInfoWindowClick(Marker marker) {
-                dosomthing(marker);
-                /*DialogFragment newFragment = new DialogFragment();
-                newFragment.setStyle(4,0);
-                newFragment.show(getSupportFragmentManager(), "missiles");
-                */
-
-
+                onMarkerChosen(marker);
         }});
 
 
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(home));
     }
 
 
@@ -366,34 +336,30 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
         return result;
     }
 
-    public void dosomthing(Marker marker) {
-        DialogFragment newFragment = new DialogFragment();
-        newFragment.setStyle(4,0);
-        newFragment.show(getSupportFragmentManager(), "missiles");
+    public void onMarkerChosen(Marker marker) {
+        //DialogFragment newFragment = new DialogFragment();
+        //newFragment.setStyle(4,0);
+        //newFragment.show(getSupportFragmentManager(), "missiles");
 
-        Intent intent = new Intent(getBaseContext(), ApartmentActivity.class);
-            LatLng lg = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
-            String ad = apartmentsAddresses.get(lg);
-            Bundle b = apartments.get(ad);
-            if(getIntent().getExtras().containsKey("idFacebook"))
-                b.putString("idFacebook",getIntent().getExtras().get("idFacebook").toString());
-            intent.putExtras(b);
-            startActivity(intent);
-    }
 
-    private void getUser(final String m_text) {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
 
-                HashMap<String,String> header = new HashMap<String,String>();
-                header.put("token",getIntent().getExtras().get("idFacebook").toString());
-                header.put("address",m_text);
-                Communication.makePostRequestGetCode(Communication.ip+"/addApartment", header,null);
-                return null;
+        HomeActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                Intent intent = new Intent(getBaseContext(), ApartmentActivity.class);
+                LatLng lg = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
+                String ad = apartmentsAddresses.get(lg);
+                Bundle b = apartments.get(ad);
+                if(getIntent().getExtras().containsKey("sessionId"))
+                    b.putString("sessionId",getIntent().getExtras().get("sessionId").toString());
+                intent.putExtras(b);
+                try {
+                    startActivity(intent);}
+                catch (Exception e){}
             }
-        }.execute();
+        });
+
     }
+
 
     private Bundle apartmentToBundle(Apartment ap){
         Bundle b = new Bundle();
@@ -411,6 +377,20 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
         b.putDouble("averageRank", ap.getAverageRank());
         b.putString("image",ap.getImage());
         b.putString("landLordID",ap.getLandLordID());
+        return b;
+    }
+
+
+    private Bundle userToBundle(User user){
+        Bundle b = new Bundle();
+        b.putString("email", user.getEmail());
+        b.putString("fistName", user.getFirstName());
+        b.putString("gender", user.getGender());
+        b.putString("image", user.getImage());
+        b.putString("lastName", user.getLastName());
+        b.putString("token", user.getToken());
+        b.putDouble("avglandrank", user.getAvgRankLandLoard());
+        b.putDouble("avgRankrank", user.getAvgRankRanker());
         return b;
     }
 

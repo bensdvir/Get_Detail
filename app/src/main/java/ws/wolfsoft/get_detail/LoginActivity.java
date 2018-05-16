@@ -65,6 +65,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
     public static String sessionId ="";
+    public static  String ano = null;
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -135,7 +136,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                         data.putString("sessionId",facebookData.get("idFacebook").toString());
                                         intent.putExtras(data);
                                         sessionId = facebookData.get("idFacebook").toString();
-                                        startActivity(intent);
+                                        try {
+                                            startActivity(intent);}
+                                        catch (Exception e){}
                                     }
                                 });
 
@@ -183,12 +186,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
         TextView textView = (TextView) findViewById(R.id.anonymus_text);
-        SpannableString content = new SpannableString("Anonymus user:");
+        SpannableString content = new SpannableString("Anonymous user:");
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         textView.setText(content);
 
         TextView textView2 = (TextView) findViewById(R.id.login_text);
-        SpannableString content2 = new SpannableString("Registerd user:");
+        SpannableString content2 = new SpannableString("Registered user:");
         content2.setSpan(new UnderlineSpan(), 0, content2.length(), 0);
         textView2.setText(content2);
 
@@ -199,6 +202,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Intent intent = new Intent(getBaseContext(), HomeActivity.class);
                 Bundle b = new Bundle();
                 intent.putExtras(b);
+                ano = "";
                 startActivity(intent);
             }
         });
@@ -231,7 +235,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 bundle.putString("email", object.getString("email"));
             if (object.has("gender"))
                 bundle.putString("gender", object.getString("gender"));
-
 
 
             prefUtil.saveFacebookUserInfo(object.getString("first_name"),

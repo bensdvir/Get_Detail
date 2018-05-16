@@ -8,7 +8,10 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:openDrawer="start"
 android:orientation="vertical"
-android:background="#f2f2f2">
+android:background="#ffffff">
+
+    <!--android:background="#f2f2f2"
+    -->
 
 <!--  <android.support.v4.widget.SwipeRefreshLayout
       xmlns:android="http://schemas.android.com/apk/res/android"
@@ -55,7 +58,6 @@ android:background="#f2f2f2">
             android:id="@+id/slider"
             android:layout_width="match_parent"
             custom:pager_animation_span="1100"
-            android:layout_height="300dp"
             style="@style/AndroidImageSlider_Oval_Black"
             />
 
@@ -77,8 +79,285 @@ android:background="#f2f2f2">
 
 
             <!--*********Iphone price**********-->
+            <LinearLayout
 
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/location"
+                    android:layout_weight="0.5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Location"
+                    android:textColor="@color/colorTex"
+                    android:textStyle="bold"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+
+                <fragment
+                    android:id="@+id/place_autocomplete_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                    />
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colordevider"
+                android:padding="16dp"
+                />
             <!--*********Brand**********-->
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/price"
+                    android:layout_weight="0.5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Price Range"
+                    android:textColor="@color/colorTex"
+                    android:textStyle="bold"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/priceFrom"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="From"
+                    android:textColor="@color/colorSub"
+
+                    />
+                <!--
+                     <Spinner
+                         android:id="@+id/spinner1"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:entries="@array/rooms_arrays"
+                         android:prompt="@string/rooms_prompt" />
+                         -->
+                <customfonts.MyEditText
+                    android:id="@+id/myEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="0"
+                    android:inputType="number"/>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/priceTo"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="To"
+                    android:textColor="@color/colorSub"
+
+                    />
+                <!--
+                     <Spinner
+                         android:id="@+id/spinner1"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:entries="@array/rooms_arrays"
+                         android:prompt="@string/rooms_prompt" />
+                         -->
+                <customfonts.MyEditText
+                    android:id="@+id/myEditText2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="0"
+                    android:inputType="number"/>
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colordevider"
+                android:padding="16dp"
+                />
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/size"
+                    android:layout_weight="0.5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Size"
+                    android:textColor="@color/colorTex"
+                    android:textStyle="bold"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/sizeFrom"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="From"
+                    android:textColor="@color/colorSub"
+
+                    />
+                <!--
+                     <Spinner
+                         android:id="@+id/spinner1"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:entries="@array/rooms_arrays"
+                         android:prompt="@string/rooms_prompt" />
+                         -->
+                <customfonts.MyEditText
+                    android:id="@+id/myEditText3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="0"
+                    android:inputType="number"/>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/sizeTo"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="To"
+                    android:textColor="@color/colorSub"
+
+                    />
+                <!--
+                     <Spinner
+                         android:id="@+id/spinner1"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:entries="@array/rooms_arrays"
+                         android:prompt="@string/rooms_prompt" />
+                         -->
+                <customfonts.MyEditText
+                    android:id="@+id/myEditText4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="0"
+                    android:inputType="number"/>
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colordevider"
+                android:padding="16dp"
+                />
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/other"
+                    android:layout_weight="0.5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Others"
+                    android:textColor="@color/colorTex"
+                    android:textStyle="bold"
+
+                    />
+
+            </LinearLayout>
 
             <LinearLayout
 
@@ -156,36 +435,6 @@ android:background="#f2f2f2">
 
             *********size**********
 
-            <LinearLayout
-
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <customfonts.MyTextView
-                    android:id="@+id/size1"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Dimensions"
-                    android:textColor="@color/colorSub"
-
-                    />
-
-                <customfonts.MyTextView
-                    android:id="@+id/size2"
-                    android:layout_weight="0.5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="138.3 * 67.1mm"
-                    android:textColor="@color/colorTex"
-
-                    />
-            </LinearLayout>
 
 
             <!--*********weight**********-->
@@ -246,6 +495,8 @@ android:background="#f2f2f2">
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:id="@+id/elevatorSwitch"
+
 
                     />
             </LinearLayout>
@@ -275,6 +526,8 @@ android:background="#f2f2f2">
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:id="@+id/warehouseSwitch"
+
                     />
             </LinearLayout>
 
@@ -449,21 +702,12 @@ android:background="#f2f2f2">
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="#f2f2f2">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ABOUT APARTMENT"
-                    android:padding="16dp"
-                    android:textSize="13dp"
-                    android:textColor="@color/colorSub"
-                    />
+                android:background="#ffffff">
 
 
 
                 <Button
-                    android:id="@+id/anonymus_button"
+                    android:id="@+id/search_button"
                     style="?android:textAppearanceSmall"
                     android:layout_width="180dp"
                     android:layout_height="25dp"
@@ -488,7 +732,8 @@ android:background="#f2f2f2">
 
 
 
-<!--<ListView-->
+
+    <!--<ListView-->
 <!--android:id="@+id/listview"-->
 <!--android:layout_width="match_parent"-->
 <!--android:layout_height="match_parent"-->
