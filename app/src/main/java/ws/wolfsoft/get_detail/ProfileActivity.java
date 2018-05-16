@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.format.DateFormat;
@@ -60,10 +61,11 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
         setContentView(R.layout.activity_profile);
 
         String userID = "";
-        if (getIntent().getExtras().containsKey("notProfile") || (!getIntent().getExtras().containsKey("isProfile"))) {
-            userID = getIntent().getExtras().getString("LandLordID");
-        } else {
-            userID = getIntent().getExtras().getString("sessionId");
+            if (getIntent().getExtras().containsKey("notProfile") || (!getIntent().getExtras().containsKey("isProfile"))) {
+                userID = getIntent().getExtras().getString("LandLordID");
+            } else {
+                userID = LoginActivity.sessionId;
+
         }
 
 
@@ -72,6 +74,9 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(final RatingBar ratingBar, float rating,
                                         boolean fromUser) {
+                if(LoginActivity.sessionId == null){
+                    return;
+                }
                 if (finalUserID.equals(LoginActivity.sessionId)) {
 
                     Thread t3 = new Thread(new Runnable() {
@@ -93,16 +98,18 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                     } catch (Exception e) {
                     }
                 }
-                HomeActivity.usersRatings.put(finalUserID, ratingBar.getRating());
-                //TODO: add rating in server
-                ratingBar.setClickable(false);
-                ratingBar.setActivated(false);
-                ratingBar.setEnabled(false);
-
+                else {
+                    HomeActivity.usersRatings.put(finalUserID, ratingBar.getRating());
+                    //TODO: add rating in server
+                    ratingBar.setClickable(false);
+                    ratingBar.setActivated(false);
+                    ratingBar.setEnabled(false);
+                }
             }
         });
         ImageView comment = (ImageView) findViewById(R.id.commentImage);
         String finalUserID3 = userID;
+        String finalUserID1 = userID;
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,6 +124,9 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if(LoginActivity.sessionId == null){
+                            return;
+                        }
                         Bundle b = getIntent().getExtras();
                         if (finalUserID3.equals(LoginActivity.sessionId)) {
 
@@ -136,33 +146,49 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                                 t3.join();
                             } catch (Exception e) {
                             }
-                        } else {
-                            m_Text = input.getText().toString();
-                            Thread t3 = new Thread(new Runnable() {
+                        }
+                        else {
+                            if (LoginActivity.sessionId == null) {
+                                Thread t3 = new Thread(new Runnable() {
 
-                                public void run() {
-                                    HashMap<String, String> header = new HashMap<String, String>();
-                                    header.put("text", m_Text);
-                                    header.put("userTo", finalUserID3);
-                                    //header.put("userID",getIntent().getExtras().getString("landLordID"));
-                                    //header.put("userFrom", LoginActivity.sessionId);
-                                    header.put("userFrom", getIntent().getExtras().getString("sessionId"));
-                                    Communication.makePostRequestGetCode(Communication.ip + "/comment/toUser", header, null);
-                                    ProfileActivity.this.runOnUiThread(new Runnable() {
-                                        public void run() {
-                                            Toast.makeText(ProfileActivity.this, "comment published", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                    //if (temp!= null){
+                                    public void run() {
+                                        ProfileActivity.this.runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Toast.makeText(ProfileActivity.this, "You are not a valid user", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
 
-                                    //}
-                                    //ans = response;//
-                                }
-                            });
-                            try {
-                                t3.start();
-                                t3.join();
-                            } catch (Exception e) {
+                                    }
+                                });
+
+                            } else {
+                                m_Text = input.getText().toString();
+                                new AsyncTask<Void, Void, Void>() {
+                                    @Override
+                                    protected Void doInBackground(Void... params) {
+                                        HashMap<String, String> header = new HashMap<String, String>();
+                                        header.put("text", m_Text);
+                                        header.put("userTo", finalUserID3);
+                                        //header.put("userID",getIntent().getExtras().getString("landLordID"));
+                                        //header.put("userFrom", LoginActivity.sessionId);
+                                        header.put("userFrom", LoginActivity.sessionId);
+                                        Communication.makePostRequestGetCode(Communication.ip + "/comment/toUser", header, null);
+                                        Handler mainHandler = new Handler(ProfileActivity.this.getMainLooper());
+
+                                        Runnable myRunnable = new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(ProfileActivity.this, "comment published", Toast.LENGTH_SHORT).show();
+                                            } // This is your code
+                                        };
+                                        mainHandler.post(myRunnable);
+                                        //if (temp!= null){
+
+                                        //}
+                                        //ans = response;//
+                                        return null;
+                                    }
+                                }.execute();
                             }
                         }
                     }
@@ -226,14 +252,12 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-                        if (!getIntent().getExtras().containsKey("notProfile") || (getIntent().getExtras().containsKey("isProfile")) || getIntent().getExtras().containsKey("sessionId")) {
+                        if (LoginActivity.sessionId!=null) {
                             LoginManager.getInstance().logOut();
                         }
                         try {
-                            startActivity(intent);
-                        } catch (Exception e) {
-                        }
-                    }
+                            startActivity(intent);}
+                        catch (Exception e){}                      }
                 });
 
 
@@ -256,33 +280,46 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
      //       }
        // });
 
-        final HashMap<String, String> header = new HashMap<String, String>();
-        header.put("commented", userID);
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                List<Comment> response = Communication.makeGetRequestGetList(Communication.ip + "/comment/getAllComments", header, Comment.class);
-                listview = (ExpandableHeightListView) findViewById(R.id.listview);
-                Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-                Bean = new ArrayList<UI_objects.Bean>();
-                for (int i = 0; i < response.size(); i++) {
-                    Comment com = response.get(i);
-                    //Log.d("hidvir",com.getText());
-                    cal.setTimeInMillis(Long.parseLong(com.getTimeStamp().toString()));
-                    String date = DateFormat.format("dd-MM-yyyy", cal).toString();
+        if(userID!=null) {
 
-                    UI_objects.Bean bean = new UI_objects.Bean(com.getUserPictureUrl().toString(), com.getText(), date, com.getUserName(), com.getUserToken());
-                    //                     //Bean bean = new Bean(0, com.getText(), com.getTimeStamp().toString(), com.getUserName());
-                    Bean.add(bean);
+            final HashMap<String, String> header = new HashMap<String, String>();
+            header.put("commented", userID);
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    List<Comment> response = Communication.makeGetRequestGetList(Communication.ip + "/comment/getAllComments", header, Comment.class);
+                    listview = (ExpandableHeightListView) findViewById(R.id.listview);
+                    Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+                    Bean = new ArrayList<UI_objects.Bean>();
+                    for (int i = 0; i < response.size(); i++) {
+                        Comment com = response.get(i);
+                        //Log.d("hidvir",com.getText());
+                        cal.setTimeInMillis(Long.parseLong(com.getTimeStamp().toString()));
+                        String date = DateFormat.format("dd-MM-yyyy", cal).toString();
+
+                        UI_objects.Bean bean = new UI_objects.Bean(com.getUserPictureUrl().toString(), com.getText(), date, com.getUserName(), com.getUserToken());
+                        //                     //Bean bean = new Bean(0, com.getText(), com.getTimeStamp().toString(), com.getUserName());
+                        Bean.add(bean);
+                    }
+                    baseAdapter = new JayBaseAdapter(ProfileActivity.this, Bean) {
+                    };
+                    listview = (ExpandableHeightListView) findViewById(R.id.listview);
+
+
+                    Handler mainHandler = new Handler(ProfileActivity.this.getMainLooper());
+
+                    Runnable myRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            listview.setAdapter(baseAdapter);
+                        } // This is your code
+                    };
+                    mainHandler.post(myRunnable);
+
+                    return null;
                 }
-                baseAdapter = new JayBaseAdapter(ProfileActivity.this, Bean) {
-                };
-                listview = (ExpandableHeightListView) findViewById(R.id.listview);
-                listview.setAdapter(baseAdapter);
-
-                return null;
-            }
-        }.execute();
+            }.execute();
+        }
     }
 
 
@@ -297,13 +334,14 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
     public void doInit(View v, String userID) {
         HashMap<String, String> file_maps = new HashMap<String, String>();
         final Bundle data2 = getIntent().getExtras();
-        boolean isAnonymus = LoginActivity.ano!=null;
+        boolean isAnonymus = userID==null;
         //new ShowTitle().execute("http://info.radiostyle.ru/inc/getinfo.php?getcurentsong=20383&mount=lezgifm");
         mDemoSlider = (SliderLayout) findViewById(R.id.slider);
 
 
         if (!isAnonymus) {
             //final Object pic = user.get("profile_pic");
+            Bundle e  = data2;
             file_maps.put("1", data2.get("image").toString());
         } else {
             file_maps.put("1", "http://profile.actionsprout.com/default.jpeg");

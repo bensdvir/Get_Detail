@@ -154,6 +154,8 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
                 Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
                 Bundle facebookData = getIntent().getExtras();
                 facebookData.putString("isProfile","yes");
+
+                if(LoginActivity.sessionId!=null) {
                     // b.putString("idFacebook", LoginActivity.sessionId);
                     try {
                         new AsyncTask<Void, Void, Void>() {
@@ -178,16 +180,26 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
                                 return null;
                             }
                         }.execute();
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
                         HomeActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
                                 Toast.makeText(HomeActivity.this, "Some bug", Toast.LENGTH_SHORT).show();
                             }
                         });
+                    }
+                }
+                else {
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            startActivity(intent);
+                            return null;
+                        }
+                    }.execute();
 
+                }
 
-                    }            }
+                }
             });
 
         logoutLayout.setOnClickListener(new View.OnClickListener()

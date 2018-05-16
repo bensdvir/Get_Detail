@@ -130,6 +130,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                         Bundle data =  new Bundle();
                                         data.putString("idFacebook",facebookData.get("idFacebook").toString());
                                         intent.putExtras(data);
+                                        LoginActivity.sessionId = facebookData.get("idFacebook").toString();
                                         startActivity(intent);
                                     }
                                 });

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.format.DateFormat;
@@ -146,10 +147,21 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
                         UI_objects.Bean bean = new UI_objects.Bean(com.getUserPictureUrl().toString(), com.getText(), date, com.getUserName(), com.getUserToken());
                         //                     //Bean bean = new Bean(0, com.getText(), com.getTimeStamp().toString(), com.getUserName());
                         Bean.add(bean);
+
                     }
                     baseAdapter = new JayBaseAdapter(ApartmentActivity.this, Bean) {};
                     listview = (ExpandableHeightListView) findViewById(R.id.listview);
-                    listview.setAdapter(baseAdapter);
+                    Handler mainHandler = new Handler(ApartmentActivity.this.getMainLooper());
+
+                    Runnable myRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            listview.setAdapter(baseAdapter);
+                        } // This is your code
+                    };
+                    mainHandler.post(myRunnable);
+
+
 
                     return null;
                 }
@@ -376,7 +388,7 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(getBaseContext(), LoginActivity.class);
-                        if (getIntent().getExtras().containsKey("profile_pic")) {
+                        if (LoginActivity.sessionId!=null) {
                             LoginManager.getInstance().logOut();
                         }
                         try {
@@ -432,6 +444,20 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
                 ratingBar.setActivated(false);
                 ratingBar.setEnabled(false);
 
+
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                HashMap<String, String> header = new HashMap<String, String>();
+                header.put("text", m_Text);
+                header.put("address", getIntent().getExtras().getString("address"));
+                //header.put("userID",getIntent().getExtras().getString("landLordID"));
+                //header.put("userID",LoginActivity.sessionId);
+                header.put("userID", getIntent().getExtras().getString("sessionId"));
+                Communication.makePostRequestGetCode(Communication.ip + "/comment/toAddress", header, null);
+                        return null;
+                    }
+                }.execute();
             }
         });
 

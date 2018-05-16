@@ -18,7 +18,10 @@ import android.widget.TextView;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import Communication.Communication;
+import DataObjects.User;
 import ws.wolfsoft.get_detail.ProfileActivity;
 import ws.wolfsoft.get_detail.R;
 
@@ -144,14 +147,28 @@ public class JayBaseAdapter extends BaseAdapter {
         viewHolder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i1 = new Intent (context, ProfileActivity.class);
-                Bundle b = new Bundle();
-                //b.putString("idFacebook", LoginActivity.sessionId);
-                //Bundle b = getIntent().getExtras();
-
-                b.putString("idFacebook",bean.userID);
-                i1.putExtras(b);
-                context.startActivity(i1);
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        Intent intent = new Intent (context, ProfileActivity.class);
+                        HashMap<String, String> header = new HashMap<String, String>();
+                        header.put("token", bean.userID);
+                        User response = Communication.makeGetRequest(Communication.ip + "/user/getByToken", header, User.class);
+                        //Bundle b = userToBundle(response);
+                        User user = response;
+                        Bundle b = new Bundle();
+                        b.putString("email", user.getEmail());
+                        b.putString("firstName", user.getFirstName());
+                        b.putString("gender", user.getGender());
+                        b.putString("image", user.getImage());
+                        b.putString("lastName", user.getLastName());
+                        b.putString("LandLordID", user.getToken());
+                        b.putString("notProfile", "hi");
+                        intent.putExtras(b);
+                        context.startActivity(intent);
+                        return null;
+                    }
+                }.execute();
             }});
 
 
