@@ -1,0 +1,811 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:openDrawer="start"
+    android:orientation="vertical"
+    android:background="#ffffff">
+
+    <!--android:background="#f2f2f2"
+    -->
+
+    <!--  <android.support.v4.widget.SwipeRefreshLayout
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@+id/swipeContainer"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+          <ListView
+              android:id="@+id/lvItems"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_alignParentLeft="true"
+              android:layout_alignParentTop="true" >
+          </ListView>
+
+      </android.support.v4.widget.SwipeRefreshLayout>
+      -->
+
+
+
+
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+
+
+
+
+
+
+
+            <UI_objects.SliderLayout
+                android:id="@+id/slider"
+                android:layout_width="match_parent"
+                custom:pager_animation_span="1100"
+                style="@style/AndroidImageSlider_Oval_Black"
+                />
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+
+
+
+                <!--*********Iphone price**********-->
+
+
+                <!--*********Shipping**********-->
+
+
+                <!--*********Iphone price**********-->
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/location"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Location"
+                        android:textColor="@color/colorTex"
+                        android:textStyle="bold"
+
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+
+                    <fragment
+                        android:id="@+id/place_autocomplete_fragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                        />
+
+                </LinearLayout>
+
+
+                <View
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colordevider"
+                    android:padding="16dp"
+                    />
+                <!--*********Brand**********-->
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/price"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Requested Price"
+                        android:textColor="@color/colorTex"
+                        android:textStyle="bold"
+
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/priceFrom"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Price"
+                        android:textColor="@color/colorSub"
+
+                        />
+                    <!--
+                         <Spinner
+                             android:id="@+id/spinner1"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:entries="@array/rooms_arrays"
+                             android:prompt="@string/rooms_prompt" />
+                             -->
+                    <customfonts.MyEditText
+                        android:id="@+id/myEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="0"
+                        android:inputType="number"/>
+                </LinearLayout>
+
+
+
+                <View
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colordevider"
+                    android:padding="16dp"
+                    />
+
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/size"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Apatrment's Size"
+                        android:textColor="@color/colorTex"
+                        android:textStyle="bold"
+
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/sizeFrom"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Size"
+                        android:textColor="@color/colorSub"
+
+                        />
+                    <!--
+                         <Spinner
+                             android:id="@+id/spinner1"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:entries="@array/rooms_arrays"
+                             android:prompt="@string/rooms_prompt" />
+                             -->
+                    <customfonts.MyEditText
+                        android:id="@+id/myEditText3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="0"
+                        android:inputType="number"/>
+                </LinearLayout>
+
+
+
+                <View
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colordevider"
+                    android:padding="16dp"
+                    />
+                <!--*********Brand**********-->
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/year"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Construction Year"
+                        android:textColor="@color/colorTex"
+                        android:textStyle="bold"
+
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/yearText"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Year"
+                        android:textColor="@color/colorSub"
+
+                        />
+                    <!--
+                         <Spinner
+                             android:id="@+id/spinner1"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:entries="@array/rooms_arrays"
+                             android:prompt="@string/rooms_prompt" />
+                             -->
+                    <customfonts.MyEditText
+                        android:id="@+id/myEditText5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="0"
+                        android:inputType="number"/>
+                </LinearLayout>
+
+
+
+                <View
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colordevider"
+                    android:padding="16dp"
+                    />
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/other"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Others"
+                        android:textColor="@color/colorTex"
+                        android:textStyle="bold"
+
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/roomsNum"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Rooms"
+                        android:textColor="@color/colorSub"
+
+                        />
+                    <!--
+                         <Spinner
+                             android:id="@+id/spinner1"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:entries="@array/rooms_arrays"
+                             android:prompt="@string/rooms_prompt" />
+                             -->
+
+                    <Spinner
+                        android:id="@+id/rooms_spinner"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:spinnerMode="dialog"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/floorNum"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Floor number"
+                        android:textColor="@color/colorSub"
+
+                        />
+                    <!--
+                         <Spinner
+                             android:id="@+id/spinner1"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:entries="@array/rooms_arrays"
+                             android:prompt="@string/rooms_prompt" />
+                             -->
+
+                    <Spinner
+                        android:id="@+id/floor_spinner"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:spinnerMode="dialog"
+                        />
+                </LinearLayout>
+
+                *********size**********
+
+
+
+                <!--*********weight**********-->
+
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/parking"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="parking"
+                        android:textColor="@color/colorSub"
+
+                        />
+
+
+
+                    <Switch
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/parkingSwitch"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/elevator"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="elevator"
+                        android:textColor="@color/colorSub"
+
+                        />
+
+
+
+                    <Switch
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/elevatorSwitch"
+
+
+                        />
+                </LinearLayout>
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/warehouse"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="warehouse"
+                        android:textColor="@color/colorSub"
+
+                        />
+
+
+
+                    <Switch
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/warehouseSwitch"
+
+                        />
+                </LinearLayout>
+
+
+
+                <!--*********show more**********-->
+
+
+
+
+
+
+
+
+                <View
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colordevider"
+                    android:padding="16dp"
+                    />
+
+
+
+                <!--*********discription**********-->
+
+
+
+
+
+
+                <!--*********Est. delivery**********-->
+                <!--
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:layout_weight="1"
+                        android:id="@+id/estdelivery1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Est. delivery"
+                        android:textColor="@color/colorSub"
+                        />
+
+                    <customfonts.MyTextView
+                        android:id="@+id/estdelivery2"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tue, Feb 17 - Fri, Feb 18"
+                        android:textColor="@color/colorTex"
+                        android:drawableRight="@drawable/arrow2"
+
+                        />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colordevider"
+                    android:padding="16dp"
+                    />
+
+
+
+
+                <-*********Returns**********-
+
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:layout_weight="1"
+                        android:id="@+id/return1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Returns"
+                        android:textColor="@color/colorSub"
+                        />
+
+                    <customfonts.MyTextView
+                        android:id="@+id/return2"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Not accepted"
+                        android:textColor="@color/colorTex"
+                        />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colordevider"
+                    android:padding="16dp"
+                    />
+
+
+
+
+                <*********Guarantee**********
+
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:layout_weight="1"
+                        android:id="@+id/guarantee1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Returns"
+                        android:textColor="@color/colorSub"
+                        />
+
+                    <customfonts.MyTextView
+                        android:id="@+id/guarantee2"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Money Back Guarantee"
+                        android:textColor="@color/colorTex"
+                        android:drawableRight="@drawable/arrow2"
+
+                        />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colordevider"
+                    android:padding="16dp"
+                    />
+
+                -->
+
+
+
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/addImage"
+                    android:layout_weight="0.5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Apatrment's Image"
+                    android:textColor="@color/colorTex"
+                    android:textStyle="bold"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/imageText"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Add Image"
+                    android:textColor="@color/colorSub"
+
+                    />
+                <!--
+                     <Spinner
+                         android:id="@+id/spinner1"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:entries="@array/rooms_arrays"
+                         android:prompt="@string/rooms_prompt" />
+                         -->
+                <Button
+                    android:id="@+id/buttonLoadPicture"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="Load Picture"
+                    android:layout_gravity="center"></Button>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#ffffff">
+
+
+
+                <Button
+                    android:id="@+id/search_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="180dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="75dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:textAllCaps="false"
+                    android:background="@color/colorAccent"
+                    android:textColor="@color/com_facebook_button_login_silver_background_color"
+                    android:text="Add Apartment"
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
+
+
+
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+
+    <!--<ListView-->
+    <!--android:id="@+id/listview"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--/>-->
+
+
+</RelativeLayout>
+
+
+
+

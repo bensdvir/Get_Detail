@@ -376,7 +376,8 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
                                 startActivity(intent);
 
                         try {
-                            startActivity(intent);}
+                            startActivity(intent);
+                        }
                         catch (Exception e){}
                                 return null;
                             }
@@ -424,10 +425,18 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
                 numRooms.setText(getIntent().getExtras().get("numRooms").toString());
 
                 customfonts.MyTextView des = (customfonts.MyTextView) findViewById(R.id.descriptionValue);
-                des.setText(getIntent().getExtras().get("description").toString());
+                //des.setText(getIntent().getExtras().get("description").toString());
 
                 customfonts.MyTextView rank = (customfonts.MyTextView) findViewById(R.id.est);
+                Bundle b = getIntent().getExtras();
                 rank.setText("Ranking: " + getIntent().getExtras().get("averageRank").toString());
+
+                customfonts.MyTextView rankText = (customfonts.MyTextView) findViewById(R.id.free);
+
+                if (Double.parseDouble(getIntent().getExtras().get("averageRank").toString())<5.0){
+                    rankText.setText("Low Ranking");
+                    rankText.setBackgroundResource(R.drawable.rectdvir);
+                }
 
 
         if (HomeActivity.aparttmentsRatings.get( getIntent().getExtras().getString("address"))!=null) {
@@ -449,12 +458,11 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
                     @Override
                     protected Void doInBackground(Void... params) {
                 HashMap<String, String> header = new HashMap<String, String>();
-                header.put("text", m_Text);
+                header.put("rank", String.valueOf(rating));
                 header.put("address", getIntent().getExtras().getString("address"));
                 //header.put("userID",getIntent().getExtras().getString("landLordID"));
                 //header.put("userID",LoginActivity.sessionId);
-                header.put("userID", getIntent().getExtras().getString("sessionId"));
-                Communication.makePostRequestGetCode(Communication.ip + "/comment/toAddress", header, null);
+                Communication.makePostRequestGetCode(Communication.ip + "/rank/address", header, null);
                         return null;
                     }
                 }.execute();

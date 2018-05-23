@@ -561,7 +561,7 @@
                         android:id="@+id/disc1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Item discription"
+                        android:text="Apartment description"
                         android:textColor="@color/colorSub"/>
                         <!--android:drawableRight="@drawable/arrow2"
                         />
@@ -584,7 +584,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/colordevider"
-                    android:padding="16dp"
+                    android:padding="2dp"
                     />
 
 
@@ -736,7 +736,7 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical"
 
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="6dp"
 
                         >
 

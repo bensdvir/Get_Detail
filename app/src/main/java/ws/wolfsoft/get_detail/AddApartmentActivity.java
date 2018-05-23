@@ -1,16 +1,14 @@
 package ws.wolfsoft.get_detail;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
+import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -27,26 +24,25 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import DataObjects.Apartment;
 
-public class SearchActivity extends AppCompatActivity {
+public class AddApartmentActivity extends AppCompatActivity {
     List<Apartment> allResults= null;
     LatLng selectedLatLng =  null;
     Location loc2 = null;
+    private static int RESULT_LOAD_IMAGE = 1;
     LocationManager mLocationManager =  null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_layout);
+        setContentView(R.layout.activity_add_apartment);
         final Spinner spinner = (Spinner) findViewById(R.id.rooms_spinner);
         mLocationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);
 
 // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(SearchActivity.this,
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(AddApartmentActivity.this,
                 R.array.rooms_arrays, android.R.layout.simple_spinner_dropdown_item);
 // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -90,19 +86,33 @@ public class SearchActivity extends AppCompatActivity {
         final Switch elevator = (Switch) findViewById(R.id.elevatorSwitch);
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-                                                            @Override
-                                                            public void onPlaceSelected(Place place) {
-                                                                selectedLatLng = place.getLatLng();
-                                                                loc2 = new Location("");
-                                                                loc2.setLatitude(selectedLatLng.latitude);
-                                                                loc2.setLongitude(selectedLatLng.longitude);
-                                                            }
+            @Override
+            public void onPlaceSelected(Place place) {
+                selectedLatLng = place.getLatLng();
+                loc2 = new Location("");
+                loc2.setLatitude(selectedLatLng.latitude);
+                loc2.setLongitude(selectedLatLng.longitude);
+            }
 
-                                                            @Override
-                                                            public void onError(Status status) {
+            @Override
+            public void onError(Status status) {
 
-                                                            }
-                                                        });
+            }
+        });
+
+        Button buttonLoadImage = (Button) findViewById(R.id.buttonLoadPicture);
+        buttonLoadImage.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+                Intent i = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
+            }
+        });
 
 
 
@@ -110,7 +120,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
 
-        search_button.setOnClickListener(new View.OnClickListener() {
+      /*  search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -130,14 +140,14 @@ public class SearchActivity extends AppCompatActivity {
                 final boolean parkingFilter = parking.isChecked();
                 final boolean elevatorFilter = elevator.isChecked();
                 boolean warehouseFilter = warehouse.isChecked();
-                Geocoder coder = new Geocoder(SearchActivity.this);
+                Geocoder coder = new Geocoder(AddApartmentActivity.this);
 
 
                 List<Apartment> afterFilter = new ArrayList<Apartment>();
 
                 if (loc2 == null) {
-                    if (ActivityCompat.checkSelfPermission(SearchActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(SearchActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(SearchActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    if (ActivityCompat.checkSelfPermission(AddApartmentActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(AddApartmentActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(AddApartmentActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                     } else {
                         if (canGetLocation()) {
                             Thread t3 = new Thread(new Runnable() {
@@ -159,13 +169,13 @@ public class SearchActivity extends AppCompatActivity {
                             }
                         }
                         else{
-                            SearchActivity.this.runOnUiThread(new Runnable() {
+                            AddApartmentActivity.this.runOnUiThread(new Runnable() {
                                 public void run() {
-                                    Toast.makeText(SearchActivity.this, "Can't get location", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AddApartmentActivity.this, "Can't get location", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
                             });
-                        return;
+                            return;
                         }
                     }}
 
@@ -210,6 +220,7 @@ public class SearchActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        */
 
 
     }
@@ -259,4 +270,29 @@ public class SearchActivity extends AppCompatActivity {
         return result;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+
+
+            //ImageView imageView = (ImageView) findViewById(R.id.imgView);
+            //imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+        }
+
+
+    }
 }

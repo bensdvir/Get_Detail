@@ -17,31 +17,7 @@
         android:orientation="horizontal">
 
 
-            <LinearLayout
-                android:layout_weight="1"
-                android:id="@+id/searchLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
 
-        <ImageView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/search"
-            android:src="@drawable/search" />
-            <TextView
-
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/searchText"
-                android:text="search"
-                android:layout_marginLeft="5dp"
-                android:textStyle="bold"
-                />
-
-
-        </LinearLayout>
 
 
 
@@ -67,6 +43,32 @@
                 android:layout_height="match_parent"
                 android:id="@+id/logoutText"
                 android:text="logout"
+                android:layout_marginLeft="5dp"
+                android:textStyle="bold"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:id="@+id/searchLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/search"
+                android:src="@drawable/search" />
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/searchText"
+                android:text="search"
                 android:layout_marginLeft="5dp"
                 android:textStyle="bold"
                 />

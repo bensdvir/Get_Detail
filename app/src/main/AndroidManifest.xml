@@ -58,7 +58,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".AddApartmentActivity"></activity>
     </application>
 
 </manifest>

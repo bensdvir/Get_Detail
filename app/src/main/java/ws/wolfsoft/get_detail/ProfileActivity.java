@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -71,6 +73,7 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
 
         RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         final String finalUserID = userID;
+        String finalUserID4 = userID;
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(final RatingBar ratingBar, float rating,
                                         boolean fromUser) {
@@ -105,6 +108,19 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                     ratingBar.setActivated(false);
                     ratingBar.setEnabled(false);
                 }
+
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        HashMap<String, String> header = new HashMap<String, String>();
+                        header.put("rank", String.valueOf(rating));
+                        header.put("userId", finalUserID4);
+                        //header.put("userID",getIntent().getExtras().getString("landLordID"));
+                        //header.put("userID",LoginActivity.sessionId);
+                        Communication.makePostRequestGetCode(Communication.ip + "/rank/user", header, null);
+                        return null;
+                    }
+                }.execute();
             }
         });
         ImageView comment = (ImageView) findViewById(R.id.commentImage);
@@ -211,6 +227,7 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
 
 
         String finalUserID2 = userID;
+        String finalUserID5 = userID;
         ProfileActivity.this.runOnUiThread(new Runnable() {
             public void run() {
 
@@ -220,33 +237,81 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                 LinearLayout profileLayout = (LinearLayout) tb.findViewById(R.id.profileLayout);
                 LinearLayout logoutLayout = (LinearLayout) tb.findViewById(R.id.logoutLayout);
                 LinearLayout searchLayout = (LinearLayout) tb.findViewById(R.id.searchLayout);
-                searchLayout.setVisibility(View.INVISIBLE);
-                searchLayout.setVisibility(View.GONE);
 
+                if (getIntent().getExtras().containsKey("isProfile") || finalUserID5.equals(LoginActivity.sessionId)){
+                    ImageView se = (ImageView) tb.findViewById(R.id.search);
+                    TextView seText = (TextView) tb.findViewById(R.id.searchText);
+                    seText.setText("add new");
+                    String uri = "@drawable/plus";  // where myresource (without the extension) is the file
+                    int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+                    Drawable res = getResources().getDrawable(imageResource);
+                    se.setImageDrawable(res);
+                }
+                else {
+                    searchLayout.setVisibility(View.INVISIBLE);
+                    searchLayout.setVisibility(View.GONE);
+                }
                 profileLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        new AsyncTask<Void, Void, Void>() {
-                            @Override
-                            protected Void doInBackground(Void... params) {
                         Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
-                        //Bundle facebookData = getIntent().getExtras();
-                        Bundle b = getIntent().getExtras();
-                        //b.putString("idFacebook", LoginActivity.sessionId);
-                        b.putString("isProfile", "yes");
-                        //b.putString("sessionId", getIntent().getExtras().getString("sessionId"));
-                        intent.putExtras(b);
-                        try {
-                            startActivity(intent);
-                        }
-                        catch (Exception e) {
-                        }
-                                return null;
-                            }
-                        }.execute();
 
-                    }
+                        if(LoginActivity.sessionId!=null) {
+                            // b.putString("idFacebook", LoginActivity.sessionId);
+                            try {
+                                new AsyncTask<Void, Void, Void>() {
+                                    @Override
+                                    protected Void doInBackground(Void... params) {
+                                        HashMap<String, String> header = new HashMap<String, String>();
+                                        header.put("token", LoginActivity.sessionId);
+                                        User response = Communication.makeGetRequest(Communication.ip + "/user/getByToken", header, User.class);
+                                        //Bundle b = userToBundle(response);
+                                        User user = response;
+                                        Bundle b = new Bundle();
+                                        b.putString("email", user.getEmail());
+                                        b.putString("firstName", user.getFirstName());
+                                        b.putString("gender", user.getGender());
+                                        b.putString("image", user.getImage());
+                                        b.putString("lastName", user.getLastName());
+                                        b.putString("token", user.getToken());
+                                        b.putString("isProfile", "yes");
+                                        b.putString("sessionId", LoginActivity.sessionId);
+                                        intent.putExtras(b);
+                                        startActivity(intent);
+                                        return null;
+                                    }
+                                }.execute();
+                            } catch (Exception e) {
+                                ProfileActivity.this.runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(ProfileActivity.this, "Some bug", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            new AsyncTask<Void, Void, Void>() {
+                                @Override
+                                protected Void doInBackground(Void... params) {
+                                    startActivity(intent);
+                                    return null;
+                                }
+                            }.execute();
+
+                    }}
                 });
+
+                searchLayout.setOnClickListener(new View.OnClickListener()
+
+                {
+                    @Override
+                    public void onClick (View view){
+                        Intent intent = new Intent(getBaseContext(), AddApartmentActivity.class);
+                        try {
+                            startActivity(intent);}
+                        catch (Exception e){}            }
+                });
+
 
                 logoutLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -267,6 +332,8 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                     ratingBar.setActivated(false);
                     ratingBar.setEnabled(false);
                 }
+
+
             }
         });
 
