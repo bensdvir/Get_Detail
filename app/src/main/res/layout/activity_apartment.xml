@@ -108,15 +108,6 @@
                         android:textColor="@color/colorTex"
                         />
 
-                    <customfonts.MyTextView
-                        android:id="@+id/price"
-                        android:layout_weight="5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="555 NIS"
-                        android:textSize="21dp"
-                        android:textColor="@color/colorTex"
-                        />
                 </LinearLayout>
 
 
@@ -218,6 +209,37 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Renting"
+                        android:textColor="@color/colorTex"
+
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/price"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Price"
+                        android:textColor="@color/colorSub"
+
+                        />
+
+                    <customfonts.MyTextView
+                        android:id="@+id/priceValue"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="300"
                         android:textColor="@color/colorTex"
 
                         />
@@ -554,7 +576,7 @@
                     android:layout_marginRight="16dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     >
 
                     <customfonts.MyTextView
@@ -566,12 +588,22 @@
                         <!--android:drawableRight="@drawable/arrow2"
                         />
                         -->
-                    <customfonts.MyTextView
+                    <!--<customfonts.MyTextView
                         android:id="@+id/descriptionValue"
                         android:layout_weight="0.5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="No"
+                        android:textColor="@color/colorTex"
+
+                        />
+                        -->
+                    <customfonts.MyTextView
+                        android:id="@+id/desValue"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="jkdfdsfffffffffffffffffff"
                         android:textColor="@color/colorTex"
 
                         />
@@ -735,8 +767,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-
-                        android:layout_marginTop="6dp"
+                        android:id="@+id/addToFavs"
+                        android:layout_marginTop="16dp"
 
                         >
 
@@ -747,7 +779,6 @@
                             android:src="@drawable/star"
                             android:layout_gravity="center"
                             android:gravity="bottom"
-
                             />
 
                         <customfonts.MyTextView

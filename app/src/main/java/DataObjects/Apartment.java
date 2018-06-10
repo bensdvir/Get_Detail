@@ -1,8 +1,9 @@
 package DataObjects;
 
 
-import java.io.Serializable;
+import android.util.Base64;
 
+import java.io.Serializable;
 public class Apartment  implements Serializable {
 
     private String address;
@@ -19,11 +20,11 @@ public class Apartment  implements Serializable {
     private Integer numToilet;
     private Integer numRooms;
     private String image;
-
+    private Boolean isRent;
 
     public Apartment(){}
 
-    public Apartment(Integer price, Integer floor, Boolean elevator, Integer constructionYear, Boolean wareHouse, String description, Double size, Double averageRank, String address, Boolean parking, Integer numToilet, Integer numRooms, String landLordID, String image) {
+    public Apartment(Integer price, Integer floor, Boolean elevator, Integer constructionYear, Boolean wareHouse, String description, Double size, Double averageRank, String address, Boolean parking, Integer numToilet, Integer numRooms, String landLordID, byte[] image, Boolean isRent) {
         this.setImage(image);
         this.setLandLordID(landLordID);
         this.setPrice(price);
@@ -38,6 +39,7 @@ public class Apartment  implements Serializable {
         this.setParking(parking);
         this.setNumToilet(numToilet);
         this.setNumRooms(numRooms);
+        this.setIsRent(isRent);
     }
 
     public String getAddress() {
@@ -144,12 +146,21 @@ public class Apartment  implements Serializable {
         this.landLordID = landLordID;
     }
 
-    public String getImage() {
-        return image;
+    public byte[] getImage() {
+        return Base64.decode(image,0);
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImage(byte[] image) {
+      String s = Base64.encodeToString(image,0);
+      this.image =s;
+    }
+
+    public Boolean getIsRent() {
+        return isRent;
+    }
+
+    public void setIsRent(Boolean rent) {
+        isRent = rent;
     }
 }
 

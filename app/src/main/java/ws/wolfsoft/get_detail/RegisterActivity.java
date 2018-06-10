@@ -27,6 +27,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -34,6 +35,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -124,15 +126,39 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                                             GraphResponse response) {
                                         // Getting FB User Data
                                         Bundle facebookData = getFacebookData(jsonObject);
-                                        sendToServer(facebookData);
+
                                         Intent intent = new Intent(getBaseContext(), HomeActivity.class);
                                         //intent.putExtras(facebookData);
                                         Bundle data =  new Bundle();
                                         data.putString("idFacebook",facebookData.get("idFacebook").toString());
+                                        data.putString("sessionId",facebookData.get("idFacebook").toString());                                        intent.putExtras(data);
                                         intent.putExtras(data);
-                                        LoginActivity.sessionId = facebookData.get("idFacebook").toString();
-                                        startActivity(intent);
-                                    }
+                                        new AsyncTask<Void, Void, Void>() {
+                                            @Override
+                                            protected Void doInBackground(Void... params) {
+                                                Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+                                                HashMap<String, String> header = new HashMap<String, String>();
+                                                header.put("token", facebookData.get("idFacebook").toString());
+                                                Boolean response = Communication.makeGetRequest(Communication.ip + "/user/isExist", header, Boolean.class);
+                                                //Bundle b = userToBundle(response);
+                                                if (!response){
+                                                    LoginActivity.sessionId = facebookData.get("idFacebook").toString();
+                                                    LoginActivity.isAno = false;
+                                                    sendToServer(facebookData);
+                                                    startActivity(intent);
+                                                }
+                                                else{
+                                                    LoginManager.getInstance().logOut();
+                                                    RegisterActivity.this.runOnUiThread(new Runnable() {
+                                                        public void run() {
+                                                            Toast.makeText(RegisterActivity.this, "You are already registered", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                                }
+
+                                                return null;
+                                            }
+                                        }.execute();                                    }
                                 });
 
                         Bundle parameters = new Bundle();

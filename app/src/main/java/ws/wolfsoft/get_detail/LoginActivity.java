@@ -1,5 +1,4 @@
 package ws.wolfsoft.get_detail;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -19,8 +18,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +27,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -49,9 +47,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
+import Communication.Communication;
 import DataObjects.PrefUtil;
+
 
 /**
  * A login screen that offers login via email/password.
@@ -64,8 +65,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-    public static String sessionId =null;
-    public static  String ano = null;
+    public static String sessionId ;
+    public static  boolean isAno = false;
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -95,12 +96,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         //populateAutoComplete();
 
+        sessionId = null;
         callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
 
         loginButton.setReadPermissions(Arrays.asList(
                 "public_profile", "email"));
         try {
+
             PackageInfo info = getPackageManager().getPackageInfo(
                     "ws.wolfsoft.get_detail",
                     PackageManager.GET_SIGNATURES);
@@ -135,10 +138,35 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                         data.putString("idFacebook",facebookData.get("idFacebook").toString());
                                         data.putString("sessionId",facebookData.get("idFacebook").toString());
                                         intent.putExtras(data);
-                                        sessionId = facebookData.get("idFacebook").toString();
-                                        try {
-                                            startActivity(intent);}
-                                        catch (Exception e){}
+
+                                        //try {
+                                        //   startActivity(intent);}
+                                        //catch (Exception e){}
+                                            new AsyncTask<Void, Void, Void>() {
+                                                @Override
+                                                protected Void doInBackground(Void... params) {
+                                                    Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+                                                    HashMap<String, String> header = new HashMap<String, String>();
+                                                    header.put("token", facebookData.get("idFacebook").toString());
+                                                    Boolean response = Communication.makeGetRequest(Communication.ip + "/user/isExist", header, Boolean.class);
+                                                    //Bundle b = userToBundle(response);
+                                                    if (response){
+                                                        LoginActivity.isAno = false;
+                                                        sessionId = facebookData.get("idFacebook").toString();
+                                                        startActivity(intent);
+                                                    }
+                                                    else{
+                                                        LoginManager.getInstance().logOut();
+                                                        LoginActivity.this.runOnUiThread(new Runnable() {
+                                                            public void run() {
+                                                                Toast.makeText(LoginActivity.this, "You are not registered", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+                                                    }
+
+                                                    return null;
+                                                }
+                                            }.execute();
                                     }
                                 });
 
@@ -165,7 +193,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
 
-        Button registerButton = (Button) findViewById(R.id.register_button);
+        TextView registerButton = (TextView) findViewById(R.id.register_button);
         registerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,15 +213,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
 
-        TextView textView = (TextView) findViewById(R.id.anonymus_text);
-        SpannableString content = new SpannableString("Anonymous user:");
-        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        /*//TextView textView = (TextView) findViewById(R.id.anonymus_text);
+        //SpannableString content = new SpannableString("Anonymous user:");
+        //content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         textView.setText(content);
 
         TextView textView2 = (TextView) findViewById(R.id.login_text);
         SpannableString content2 = new SpannableString("Registered user:");
         content2.setSpan(new UnderlineSpan(), 0, content2.length(), 0);
         textView2.setText(content2);
+        */
 
         Button anoButton = (Button) findViewById(R.id.anonymus_button);
         anoButton.setOnClickListener(new OnClickListener() {
@@ -202,7 +231,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Intent intent = new Intent(getBaseContext(), HomeActivity.class);
                 Bundle b = new Bundle();
                 intent.putExtras(b);
-                ano = "";
+                isAno = true;
+                sessionId = null;
                 startActivity(intent);
             }
         });

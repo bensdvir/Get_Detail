@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/background">
+    android:background="@drawable/login_background">
     tools:context="com.example.finalproject.LoginActivity">
 
     <!-- Login progress -->
@@ -41,23 +41,11 @@
                 style="?android:textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:layout_marginLeft="10dp"
-                android:text="Social Network For\n Real Estate"
-                android:textColor="@color/com_facebook_button_login_silver_background_color"
+                android:layout_marginTop="45dp"
+                android:fontFamily="casual"
+                android:gravity="center_horizontal"
+                android:text="Social Network For\nReal Estate"
                 android:textSize="30dp"
-                android:gravity="center"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/login_text"
-                style="?android:textAppearanceLarge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                android:layout_marginLeft="20dp"
-                android:text="Registered user:"
-                android:textSize="@dimen/activity_vertical_margin"
                 android:textStyle="bold" />
 
 
@@ -66,18 +54,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="50dp"
+                android:gravity="center"
                 android:onClick="facebookOnClick" />
 
-            <TextView
+          <!--  <TextView
                 android:id="@+id/anonymus_text"
                 style="?android:textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
-
                 android:text="Anonnymus user:"
                 android:textSize="@dimen/activity_vertical_margin"
                 android:textStyle="bold" />
@@ -96,21 +83,48 @@
                 android:text="Login as anonymus"
                 android:textSize="17dp"
                 android:textStyle="bold" />
+                -->
 
-
-            <Button
-                android:id="@+id/register_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/or_text"
+                style="?android:textAppearanceLarge"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="80dp"
-                android:layout_marginLeft="75dp"
-                android:text="Not registered? Click here"
-                android:textAllCaps="false"
+                android:fontFamily="casual"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="or"
                 android:textStyle="bold" />
 
 
+            <Button
+                android:id="@+id/anonymus_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="190dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="casual"
+                android:gravity="center"
+                android:text="use lite version"
+                android:textAllCaps="false"
+                android:layout_marginBottom="12dp"
+                android:textColor="#000000"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/register_button"
+                style="?android:textAppearanceMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:clickable="true"
+                android:fontFamily="casual"
+                android:layout_gravity="center_horizontal"
+                android:text="Not registerd? Click here"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                android:textStyle="bold" />
 
 
         </LinearLayout>

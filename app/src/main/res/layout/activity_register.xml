@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/background">
+    android:background="@drawable/login_background">
 tools:context="com.example.finalproject.RegisterActivity">
 
     <!-- Login progress -->
@@ -37,12 +37,11 @@ tools:context="com.example.finalproject.RegisterActivity">
                 style="?android:textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:layout_marginLeft="10dp"
-                android:text="Social Network For\n Real Estate"
-                android:textColor="@color/com_facebook_button_login_silver_background_color"
-                android:textSize="30dp"
+                android:layout_marginTop="65dp"
+                android:fontFamily="casual"
                 android:gravity="center"
+                android:text="Social Network For\n Real Estate"
+                android:textSize="30dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -52,7 +51,8 @@ tools:context="com.example.finalproject.RegisterActivity">
                 android:layout_height="wrap_content"
                 android:layout_marginTop="60dp"
                 android:layout_marginLeft="20dp"
-                android:text="Allow us to take your Facebook info by registering with your social neteork account"
+                android:fontFamily="casual"
+                android:text="Allow us to take your Facebook info by registering with your social network account"
                 android:textSize="@dimen/activity_vertical_margin"
                 android:textStyle="bold" />
 
@@ -63,6 +63,7 @@ tools:context="com.example.finalproject.RegisterActivity">
                 android:layout_marginTop="40dp"
                 android:layout_marginLeft="20dp"
                 android:text="I agree to terms"
+                android:fontFamily="casual"
                 android:textStyle="bold" />
 
             <com.facebook.login.widget.LoginButton

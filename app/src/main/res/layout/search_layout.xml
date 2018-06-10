@@ -336,6 +336,226 @@ android:background="#ffffff">
                 android:background="@color/colordevider"
                 android:padding="16dp"
                 />
+
+
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/rooms"
+                    android:layout_weight="0.5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Rooms"
+                    android:textColor="@color/colorTex"
+                    android:textStyle="bold"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/roomsNumFrom"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="From"
+                    android:textColor="@color/colorSub"
+
+                    />
+                <!--
+                     <Spinner
+                         android:id="@+id/spinner1"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:entries="@array/rooms_arrays"
+                         android:prompt="@string/rooms_prompt" />
+                         -->
+
+                <Spinner
+                    android:id="@+id/rooms_spinnerFrom"
+                    android:layout_weight="0.5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dialog"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/roomsNumTo"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="To"
+                    android:textColor="@color/colorSub"
+
+                    />
+           <!--
+                <Spinner
+                    android:id="@+id/spinner1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/rooms_arrays"
+                    android:prompt="@string/rooms_prompt" />
+                    -->
+
+                <Spinner
+                    android:id="@+id/rooms_spinnerTo"
+                    android:layout_weight="0.5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dialog"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colordevider"
+                android:padding="16dp"
+                />
+
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/floor"
+                    android:layout_weight="0.5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Floor"
+                    android:textColor="@color/colorTex"
+                    android:textStyle="bold"
+
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/floorNumFrom"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="From"
+                    android:textColor="@color/colorSub"
+
+                    />
+                <!--
+                     <Spinner
+                         android:id="@+id/spinner1"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:entries="@array/rooms_arrays"
+                         android:prompt="@string/rooms_prompt" />
+                         -->
+
+                <Spinner
+                    android:id="@+id/floor_spinnerFrom"
+                    android:layout_weight="0.5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dialog"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/floorNumTo"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="To"
+                    android:textColor="@color/colorSub"
+
+                    />
+                <!--
+                     <Spinner
+                         android:id="@+id/spinner1"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:entries="@array/rooms_arrays"
+                         android:prompt="@string/rooms_prompt" />
+                         -->
+
+                <Spinner
+                    android:id="@+id/floor_spinnerTo"
+                    android:layout_weight="0.5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dialog"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colordevider"
+                android:padding="16dp"
+                />
+
+            *********size**********
+
+
+
+            <!--*********weight**********-->
             <LinearLayout
 
                 android:layout_marginTop="16dp"
@@ -359,85 +579,6 @@ android:background="#ffffff">
 
             </LinearLayout>
 
-            <LinearLayout
-
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <customfonts.MyTextView
-                    android:id="@+id/roomsNum"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Rooms"
-                    android:textColor="@color/colorSub"
-
-                    />
-           <!--
-                <Spinner
-                    android:id="@+id/spinner1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/rooms_arrays"
-                    android:prompt="@string/rooms_prompt" />
-                    -->
-
-                <Spinner
-                    android:id="@+id/rooms_spinner"
-                    android:layout_weight="0.5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:spinnerMode="dialog"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <customfonts.MyTextView
-                    android:id="@+id/floorNum"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Floor number"
-                    android:textColor="@color/colorSub"
-
-                    />
-                <!--
-                     <Spinner
-                         android:id="@+id/spinner1"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:entries="@array/rooms_arrays"
-                         android:prompt="@string/rooms_prompt" />
-                         -->
-
-                <Spinner
-                    android:id="@+id/floor_spinner"
-                    android:layout_weight="0.5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:spinnerMode="dialog"
-                    />
-            </LinearLayout>
-
-            *********size**********
-
-
-
-            <!--*********weight**********-->
 
             <LinearLayout
 
@@ -530,6 +671,38 @@ android:background="#ffffff">
 
                     />
             </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <customfonts.MyTextView
+                    android:id="@+id/renting"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="for rent"
+                    android:textColor="@color/colorSub"
+
+                    />
+
+
+
+                <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/rentingSwitch"
+
+                    />
+            </LinearLayout>
+
 
 
 
@@ -711,7 +884,7 @@ android:background="#ffffff">
                     style="?android:textAppearanceSmall"
                     android:layout_width="180dp"
                     android:layout_height="25dp"
-                    android:layout_marginLeft="75dp"
+                    android:layout_marginLeft="90dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="20dp"
                     android:textAllCaps="false"

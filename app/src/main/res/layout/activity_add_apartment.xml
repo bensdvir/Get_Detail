@@ -328,7 +328,72 @@
                         android:inputType="number"/>
                 </LinearLayout>
 
+                <View
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colordevider"
+                    android:padding="16dp"
+                    />
 
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/description"
+                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="About The Apartment"
+                        android:textColor="@color/colorTex"
+                        android:textStyle="bold"
+
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/descFrom"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Description"
+                        android:textColor="@color/colorSub"
+
+                        />
+                    <!--
+                         <Spinner
+                             android:id="@+id/spinner1"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:entries="@array/rooms_arrays"
+                             android:prompt="@string/rooms_prompt" />
+                             -->
+                    <customfonts.MyEditText
+                        android:id="@+id/myEditText4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="your description"
+                        android:inputType="text"/>
+                </LinearLayout>
 
                 <View
                     android:layout_marginTop="16dp"
@@ -528,6 +593,37 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:id="@+id/warehouseSwitch"
+
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <customfonts.MyTextView
+                        android:id="@+id/renting"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="for rent"
+                        android:textColor="@color/colorSub"
+
+                        />
+
+
+
+                    <Switch
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/rentingSwitch"
 
                         />
                 </LinearLayout>
@@ -769,14 +865,15 @@
 
 
                 <Button
-                    android:id="@+id/search_button"
+                    android:id="@+id/finish_button"
                     style="?android:textAppearanceSmall"
                     android:layout_width="180dp"
                     android:layout_height="25dp"
-                    android:layout_marginLeft="75dp"
+                    android:layout_marginLeft="90dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="20dp"
                     android:textAllCaps="false"
+                    android:gravity="center"
                     android:background="@color/colorAccent"
                     android:textColor="@color/com_facebook_button_login_silver_background_color"
                     android:text="Add Apartment"

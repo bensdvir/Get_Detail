@@ -65,22 +65,38 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
         String userID = "";
             if (getIntent().getExtras().containsKey("notProfile") || (!getIntent().getExtras().containsKey("isProfile"))) {
                 userID = getIntent().getExtras().getString("LandLordID");
-            } else {
-                userID = LoginActivity.sessionId;
-
+            } else
+                {
+                    if(!LoginActivity.isAno) {
+                        userID = LoginActivity.sessionId;
+                    }
         }
 
 
         RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         final String finalUserID = userID;
         String finalUserID4 = userID;
+        String finalUserID6 = userID;
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(final RatingBar ratingBar, float rating,
                                         boolean fromUser) {
-                if(LoginActivity.sessionId == null){
+
+                if(LoginActivity.isAno){
+                    ProfileActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(ProfileActivity.this, "You can't rate", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    });
                     return;
                 }
+                if(LoginActivity.sessionId == null||  HomeActivity.usersRatings.containsKey(finalUserID6)){
+                    return;
+                }
+                 Boolean check = true;
                 if (finalUserID.equals(LoginActivity.sessionId)) {
+                    check = false;
+
 
                     Thread t3 = new Thread(new Runnable() {
 
@@ -107,6 +123,9 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                     ratingBar.setClickable(false);
                     ratingBar.setActivated(false);
                     ratingBar.setEnabled(false);
+                }
+                if (!check){
+                    return;
                 }
 
                 new AsyncTask<Void, Void, Void>() {
@@ -140,6 +159,16 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        if(LoginActivity.isAno){
+                            ProfileActivity.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(ProfileActivity.this, "You can't comment", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            });
+                            return;
+                        }
                         if(LoginActivity.sessionId == null){
                             return;
                         }
@@ -228,6 +257,7 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
 
         String finalUserID2 = userID;
         String finalUserID5 = userID;
+        String finalUserID7 = userID;
         ProfileActivity.this.runOnUiThread(new Runnable() {
             public void run() {
 
@@ -238,7 +268,6 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                 LinearLayout logoutLayout = (LinearLayout) tb.findViewById(R.id.logoutLayout);
                 LinearLayout searchLayout = (LinearLayout) tb.findViewById(R.id.searchLayout);
 
-                if (getIntent().getExtras().containsKey("isProfile") || finalUserID5.equals(LoginActivity.sessionId)){
                     ImageView se = (ImageView) tb.findViewById(R.id.search);
                     TextView seText = (TextView) tb.findViewById(R.id.searchText);
                     seText.setText("add new");
@@ -246,11 +275,8 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                     int imageResource = getResources().getIdentifier(uri, null, getPackageName());
                     Drawable res = getResources().getDrawable(imageResource);
                     se.setImageDrawable(res);
-                }
-                else {
-                    searchLayout.setVisibility(View.INVISIBLE);
-                    searchLayout.setVisibility(View.GONE);
-                }
+
+
                 profileLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -273,6 +299,7 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                                         b.putString("gender", user.getGender());
                                         b.putString("image", user.getImage());
                                         b.putString("lastName", user.getLastName());
+                                        b.putString("rank", user.getAvgRankRanker().toString());
                                         b.putString("token", user.getToken());
                                         b.putString("isProfile", "yes");
                                         b.putString("sessionId", LoginActivity.sessionId);
@@ -306,11 +333,58 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                 {
                     @Override
                     public void onClick (View view){
+
+                        if(LoginActivity.isAno){
+                            ProfileActivity.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(ProfileActivity.this, "You can't add assets", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            });
+                            return;
+                        }
+
                         Intent intent = new Intent(getBaseContext(), AddApartmentActivity.class);
                         try {
                             startActivity(intent);}
                         catch (Exception e){}            }
                 });
+
+                LinearLayout toFavs = (LinearLayout) findViewById(R.id.myFavs);
+
+                //mDemoSlider.addOnPageChangeListener();
+                toFavs.setOnClickListener(new View.OnClickListener()
+
+                {
+                    @Override
+                    public void onClick (View view){
+                        if(LoginActivity.isAno){
+                            ProfileActivity.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(ProfileActivity.this, "You can't have/access favourites", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            });
+                            return;
+
+                        }
+                        if (finalUserID7.equals(LoginActivity.sessionId)){
+
+                        Intent intent = new Intent(getBaseContext(), FavouritesActivity.class);
+                        try {
+                            startActivity(intent);}
+                        catch (Exception e){}
+                        }
+                        else{
+                            ProfileActivity.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(ProfileActivity.this, "You can't access", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            });
+                            return;
+                        }
+                }});
 
 
                 logoutLayout.setOnClickListener(new View.OnClickListener() {
@@ -326,7 +400,7 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                 });
 
 
-                if (HomeActivity.usersRatings.containsKey(finalUserID2)) {
+                if (HomeActivity.usersRatings.containsKey(finalUserID2) && !LoginActivity.isAno) {
                     ratingBar.setRating(HomeActivity.usersRatings.get(finalUserID2));
                     ratingBar.setClickable(false);
                     ratingBar.setActivated(false);
@@ -401,7 +475,7 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
     public void doInit(View v, String userID) {
         HashMap<String, String> file_maps = new HashMap<String, String>();
         final Bundle data2 = getIntent().getExtras();
-        boolean isAnonymus = userID==null;
+        boolean isAnonymus = LoginActivity.isAno && !getIntent().getExtras().containsKey("notProfile");
         //new ShowTitle().execute("http://info.radiostyle.ru/inc/getinfo.php?getcurentsong=20383&mount=lezgifm");
         mDemoSlider = (SliderLayout) findViewById(R.id.slider);
 
@@ -438,15 +512,21 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
         customfonts.MyTextView name = (customfonts.MyTextView) findViewById(R.id.name);
         customfonts.MyTextView emailValue = (customfonts.MyTextView) findViewById(R.id.emailValue);
         customfonts.MyTextView genderValue = (customfonts.MyTextView) findViewById(R.id.genderValue);
+        customfonts.MyTextView rankValue = (customfonts.MyTextView) findViewById(R.id.rankValue);
+
 
         if (!isAnonymus) {
             name.setText(data2.get("firstName").toString() + " " + data2.get("lastName").toString());
             emailValue.setText(data2.get("email").toString());
             genderValue.setText(data2.get("gender").toString());
+            float f = Float.parseFloat(data2.get("rank").toString());
+            String formattedString = String.format("%.02f", f);
+            rankValue.setText(formattedString);
         } else {
             name.setText("Anonymus");
             emailValue.setText("Unknown");
             genderValue.setText("Unknown");
+            rankValue.setText("Unknown");
         }
     }
 

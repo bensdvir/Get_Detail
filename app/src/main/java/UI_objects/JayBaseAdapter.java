@@ -161,6 +161,7 @@ public class JayBaseAdapter extends BaseAdapter {
                         b.putString("firstName", user.getFirstName());
                         b.putString("gender", user.getGender());
                         b.putString("image", user.getImage());
+                        b.putString("rank", user.getAvgRankRanker().toString());
                         b.putString("lastName", user.getLastName());
                         b.putString("LandLordID", user.getToken());
                         b.putString("notProfile", "hi");

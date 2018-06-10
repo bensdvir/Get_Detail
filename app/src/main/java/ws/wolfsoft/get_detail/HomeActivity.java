@@ -44,14 +44,21 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
     private static final String TAG = "";
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     public HashMap<String,Bundle> apartments = new HashMap<>();
+    static public HashMap<String,byte[]> apartmentsImages = new HashMap<>();
+
     public HashMap<LatLng,String> apartmentsAddresses = new HashMap<>();
     public static HashMap<String,Float> aparttmentsRatings = new HashMap<>();
+    public static HashMap<String,Apartment> homeToSearch = new HashMap<>();
+    public static HashMap<String,Apartment> searchToHome = new HashMap<>();
+
+
     public static HashMap<String,Float> usersRatings = new HashMap<>();
     boolean preesed = false;
 
 
 
     private GoogleMap mMap;
+    static byte[] tmpImage= null;
     private int n;
     private PopupWindow mPopupWindow;
     private String m_Text = "";
@@ -70,10 +77,28 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
         SupportMapFragment map = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         map.getMapAsync(this);
         final Button locButton = (Button) findViewById(R.id.buttonLoc);
+        final Button resButton = (Button) findViewById(R.id.buttonRestart);
+
         locButton.setBackgroundResource(R.drawable.loc_black);
+        resButton.setBackgroundResource(R.drawable.res_button);
+        resButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+                        getIntent().removeExtra("isInSearch");
+                        finish();
+                startActivity(getIntent());
+                        return null;
+                    }
+                }.execute();
+            }
+            });
+
 
         locButton.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("StaticFieldLeak")
             @Override
             public void onClick(View view) {
                 //locButton.setClickable(false);
@@ -131,18 +156,24 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
             {
                 @Override
                 public void onClick (View view){
-                Intent intent = new Intent(getBaseContext(), SearchActivity.class);
+                Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
                 Bundle bundle = new Bundle();
                 int i = 0;
                 for (Apartment ap : ans) {
-                    intent.putExtra("ap" + i, ap);
+                    homeToSearch.put("ap"+i,ap);
+                    //intent.putExtra("ap" + i, ap);
                     i += 1;
                 }
-                bundle.putInt("apartmentsNum", ans.size());
+                bundle.putInt("apartmentsNum", homeToSearch.size());
+                if(getIntent().getExtras().containsKey("idFacebook")) {
+                    bundle.putString("idFacebook", getIntent().getExtras().get("idFacebook").toString());
+                }
+                if(getIntent().getExtras().containsKey("idFacebook")) {
+                    bundle.putString("sessionId", getIntent().getExtras().get("idFacebook").toString());
+                }
                 intent.putExtras(bundle);
-                    try {
-                        startActivity(intent);}
-                    catch (Exception e){}            }
+                startActivity(intent);
+                }
             });
 
 
@@ -154,6 +185,16 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
                 Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
                 Bundle facebookData = getIntent().getExtras();
                 facebookData.putString("isProfile","yes");
+
+                if(LoginActivity.isAno){
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            startActivity(intent);
+                            return null;
+                        }
+                    }.execute();
+                }
 
                 if(LoginActivity.sessionId!=null) {
                     // b.putString("idFacebook", LoginActivity.sessionId);
@@ -170,6 +211,7 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
                                 b.putString("email", user.getEmail());
                                 b.putString("firstName", user.getFirstName());
                                 b.putString("gender", user.getGender());
+                                b.putString("rank", user.getAvgRankRanker().toString());
                                 b.putString("image", user.getImage());
                                 b.putString("lastName", user.getLastName());
                                 b.putString("token", user.getToken());
@@ -239,10 +281,16 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
                 } else {
                     int numAp = getIntent().getExtras().getInt("apartmentsNum");
                     List<Apartment> allResults = new ArrayList<Apartment>();
-                    for (int i = 0; i < numAp; i++) {
+                    for (HashMap.Entry<String, Apartment> entry : HomeActivity.searchToHome.entrySet())
+                    {
+                        allResults.add(entry.getValue()) ;
+                    }
+                    searchToHome = new HashMap<>();
+                    /*for (int i = 0; i < numAp; i++) {
                         Apartment tmp = (Apartment) getIntent().getExtras().get("ap" + i);
                         allResults.add(tmp);
                     }
+                   */
 
                     setApartmentsOnMap(allResults);
                 }
@@ -281,6 +329,7 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
                 apartmentsAddresses.put(lg,strAddress);
                 mMap.addMarker(new MarkerOptions().position(lg).title(strAddress));
                 apartments.put(strAddress,apartmentToBundle(ap));
+                apartmentsImages.put(strAddress, ap.getImage());
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -383,12 +432,14 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
         b.putBoolean("parking", ap.getParking());
         b.putInt("constructionYear", ap.getConstructionYear().intValue());
         b.putString("description", ap.getDescription());
-        b.putInt("numToilets",ap.getNumToilet().intValue());
+        b.putInt("numToilets", ap.getNumToilet().intValue());
         b.putInt("numRooms",ap.getNumRooms().intValue());
         b.putDouble("size",ap.getSize());
         b.putDouble("averageRank", ap.getAverageRank());
-        b.putString("image",ap.getImage());
+        //b.putString("image",ap.getImage());
         b.putString("landLordID",ap.getLandLordID());
+        b.putBoolean("isRent",ap.getIsRent());
+
         return b;
     }
 

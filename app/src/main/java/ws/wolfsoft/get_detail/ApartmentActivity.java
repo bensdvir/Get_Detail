@@ -23,6 +23,10 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.facebook.login.LoginManager;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -89,6 +93,23 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
                             Thread t3 = new Thread(new Runnable() {
 
                                 public void run() {
+                                    if(LoginActivity.isAno){
+                                        ApartmentActivity.this.runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Toast.makeText(ApartmentActivity.this, "You can't comment", Toast.LENGTH_SHORT).show();
+                                                return;
+                                            }
+                                        });
+                                        return;
+                                    }
+                                    if (LoginActivity.sessionId.equals(getIntent().getExtras().get("landLordID"))){
+                                        ApartmentActivity.this.runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Toast.makeText(ApartmentActivity.this, "You can't comment your own asset", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                        return;
+                                    }
                                     HashMap<String, String> header = new HashMap<String, String>();
                                     header.put("text", m_Text);
                                     header.put("address", getIntent().getExtras().getString("address"));
@@ -199,59 +220,128 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
                 });
 
 //         ********Slider*********
-
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
                 mDemoSlider = (SliderLayout) findViewById(R.id.slider);
 
-                HashMap<String, String> file_maps = new HashMap<String, String>();
-                file_maps.put("1", getIntent().getExtras().get("image").toString());
+                //HashMap<String, String> file_maps = new HashMap<String, String>();
+                //file_maps.put("1", getIntent().getExtras().get("image").toString());
                 //file_maps.put("2",R.drawable.rabiakiva2);
 
 
-                for (String name : file_maps.keySet()) {
-                    TextSliderView textSliderView = new TextSliderView(ApartmentActivity.this);
-                    // initialize a SliderLayout
-                    textSliderView
-                            //  .description(name)
-                            .image(file_maps.get(name))
-                            .setScaleType(BaseSliderView.ScaleType.CenterInside)
-                            .setOnSliderClickListener(ApartmentActivity.this);
-
-
-                    textSliderView.bundle(new Bundle());
-                    textSliderView.getBundle().putString("extra", name);
-
-                    mDemoSlider.addSlider(textSliderView);
+                ///////////////////////////////////////changes
+                File f = new File((getApplicationContext().getFileStreamPath(getIntent().getExtras().get("address").toString()+".jpg")
+                        .getPath()) );
+                if(f.exists())
+                    f.delete();
+                try {
+                    f.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Default);
-                mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-                mDemoSlider.setCustomAnimation(new ChildAnimationExample());
-                mDemoSlider.setDuration(4000);
+
+                //Convert bitmap to byte array
+               /* Bitmap  bmp = null;
+                try {
+                    URL url = new URL("https://assets.homeforexchange.com/images/cs/reacthomepage/hfe_block_03_land.jpg");
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setDoInput(true);
+                    connection.connect();
+                    InputStream input = connection.getInputStream();
+                    Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                    bmp = myBitmap;
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG, bos);
+
+                    byte[] bitmapdata = bos.toByteArray();
+                    */
+                    byte[] bitmapdata = HomeActivity.apartmentsImages.get(getIntent().getExtras().get("address").toString());
+                    //byte[] bitmapdata= HomeActivity.tmpImage;
+                    //write the bytes in file
+                    FileOutputStream fos = null;
+                    try {
+                        fos = new FileOutputStream(f);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        fos.write(bitmapdata);
+                        fos.flush();
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                HashMap<String, File> file_maps = new HashMap<String, File>();
+                file_maps.put("1", f);
+
+
+
+
+
+
+                /////////////////////////////
+                        ApartmentActivity.this.runOnUiThread(new Runnable() {
+                            public void run() {
+                                for (String name : file_maps.keySet()) {
+                                    TextSliderView textSliderView = new TextSliderView(ApartmentActivity.this);
+                                    // initialize a SliderLayout
+                                    textSliderView
+                                            //  .description(name)
+                                            .image(file_maps.get(name))
+                                            .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                                            .setOnSliderClickListener(ApartmentActivity.this);
+
+
+                                    textSliderView.bundle(new Bundle());
+                                    textSliderView.getBundle().putString("extra", name);
+
+                                    mDemoSlider.addSlider(textSliderView);
+                                }
+                                mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Default);
+                                mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                                mDemoSlider.setCustomAnimation(new ChildAnimationExample());
+                                mDemoSlider.setDuration(4000);
+                            }
+                        });
+
+
+
+                        return null;
+                    }
+                }.execute();
+
                 //mDemoSlider.addOnPageChangeListener();
 
 
             }});
 
 
+
         final ImageView imageView2 = (ImageView) findViewById(R.id.toLandlordImage);
         final User[] user = new User[1];
-        Thread t = new Thread(new Runnable() {
+        final String finalId = getIntent().getExtras().get("landLordID").toString();
+
+        /*Thread t = new Thread(new Runnable() {
 
             public void run() {
-                final String finalId = getIntent().getExtras().get("landLordID").toString();
-                HashMap<String, String> header = new HashMap<String, String>();
-                header.put("token", finalId);
-                User response = Communication.makeGetRequest(Communication.ip + "/user/getByToken", header, User.class);
-                user[0] = response;
+
                 //ans = response;//
             }
         });
         try {t.start();t.join();}catch (Exception e){}
+        */
 
         new AsyncTask<Void, Void, Void>() {
             Bitmap bmp =  null;
             @Override
             protected Void doInBackground(Void... params) {
                 try {
+                    HashMap<String, String> header = new HashMap<String, String>();
+                    header.put("token", finalId);
+                    User response = Communication.makeGetRequest(Communication.ip + "/user/getByToken", header, User.class);
+                    user[0] = response;
                     InputStream in = new URL(user[0].getImage().toString()).openStream();
                     bmp = BitmapFactory.decodeStream(in);
                 } catch (Exception e) {
@@ -311,6 +401,50 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
 
         LinearLayout toLand = (LinearLayout) findViewById(R.id.toLandLayout);
 
+        LinearLayout toFavs = (LinearLayout) findViewById(R.id.addToFavs);
+        toFavs.setOnClickListener(new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View view) {
+
+                                          if(LoginActivity.isAno){
+                                              ApartmentActivity.this.runOnUiThread(new Runnable() {
+                                                  public void run() {
+                                                      Toast.makeText(ApartmentActivity.this, "You can't have favourites", Toast.LENGTH_SHORT).show();
+                                                      return;
+                                                  }
+                                              });
+                                              return;
+                                          }
+
+                                          new AsyncTask<Void, Void, Void>() {
+                                              @Override
+                                              protected Void doInBackground(Void... params) {
+                                                  Intent intent = new Intent(ApartmentActivity.this, ProfileActivity.class);
+                                                  HashMap<String, String> header = new HashMap<String, String>();
+                                                  header.put("token", LoginActivity.sessionId);
+                                                  header.put("address", getIntent().getExtras().getString("address"));
+                                                  Boolean ans = Communication.makePostRequest(Communication.ip + "/user/addApartmentToFavorite", header, null,Boolean.class);
+                                                  ApartmentActivity.this.runOnUiThread(new Runnable() {
+                                                      public void run() {
+                                                          if (ans) {
+                                                              Toast.makeText(ApartmentActivity.this, "Apartment added successfully", Toast.LENGTH_SHORT).show();
+                                                          }
+                                                          else {
+                                                              Toast.makeText(ApartmentActivity.this, "Apartment already exists", Toast.LENGTH_SHORT).show();
+                                                          }
+                                                          return;
+                                                      }
+                                                  });
+                                                  return null;
+                                              }
+
+                                          }.execute();
+
+                                      }
+                                  });
+
+
+
         toLand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -330,6 +464,7 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
                 b.putString("gender", user.getGender());
                 b.putString("image", user.getImage());
                 b.putString("lastName", user.getLastName());
+                b.putString("rank", user.getAvgRankRanker().toString());
                 b.putString("LandLordID", user.getToken());
                 b.putString("notProfile", "hi");
                 intent.putExtras(b);
@@ -354,6 +489,21 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
                 profileLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if (LoginActivity.isAno){
+                            new AsyncTask<Void, Void, Void>() {
+                                @Override
+                                protected Void doInBackground(Void... params) {
+                                    Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
+                                    Bundle b = new Bundle();
+                                    b.putString("isProfile","yes");
+                                    intent.putExtras(b);
+                                    startActivity(intent);
+                                    return null;
+                                }
+                            }.execute();
+                            return;
+                        }
+
                         new AsyncTask<Void, Void, Void>() {
                             @Override
                             protected Void doInBackground(Void... params) {
@@ -368,6 +518,7 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
                                 b.putString("firstName", user.getFirstName());
                                 b.putString("gender", user.getGender());
                                 b.putString("image", user.getImage());
+                                b.putString("rank", user.getAvgRankRanker().toString());
                                 b.putString("lastName", user.getLastName());
                                 b.putString("token", user.getToken());
                                 b.putString("isProfile", "yes");
@@ -400,23 +551,37 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
 
                 customfonts.MyTextView address = (customfonts.MyTextView) findViewById(R.id.address);
                 address.setText(getIntent().getExtras().get("address").toString());
-                customfonts.MyTextView price = (customfonts.MyTextView) findViewById(R.id.price);
+                customfonts.MyTextView price = (customfonts.MyTextView) findViewById(R.id.priceValue);
                 price.setText(getIntent().getExtras().get("price").toString());
 
-                customfonts.MyTextView elevator = (customfonts.MyTextView) findViewById(R.id.elevatorValue);
-                elevator.setText(getIntent().getExtras().get("elevator").toString());
+                customfonts.MyTextView typeValue = (customfonts.MyTextView) findViewById(R.id.typeValue);
+                Bundle t = getIntent().getExtras();
+                if (new Boolean(getIntent().getExtras().get("isRent").toString())){
+                    typeValue.setText("For Rent");
+                }
+                else{
+                    typeValue.setText("For Sale");
 
-                customfonts.MyTextView description = (customfonts.MyTextView) findViewById(R.id.descriptionValue);
+                }
+
+
+                customfonts.MyTextView elevator = (customfonts.MyTextView) findViewById(R.id.elevatorValue);
+                elevator.setText(boolToYesNo(getIntent().getExtras().get("elevator").toString()));
+
+                customfonts.MyTextView description = (customfonts.MyTextView) findViewById(R.id.desValue);
                 description.setText(getIntent().getExtras().get("description").toString());
 
                 customfonts.MyTextView constructionYear = (customfonts.MyTextView) findViewById(R.id.constructionValue);
                 constructionYear.setText(getIntent().getExtras().get("constructionYear").toString());
 
                 customfonts.MyTextView wareHouse = (customfonts.MyTextView) findViewById(R.id.warehouseValue);
-                wareHouse.setText(getIntent().getExtras().get("wareHouse").toString());
+                wareHouse.setText(boolToYesNo(getIntent().getExtras().get("wareHouse").toString()));
+
+                customfonts.MyTextView floor = (customfonts.MyTextView) findViewById(R.id.floorValue);
+                floor.setText(getIntent().getExtras().get("floor").toString());
 
                 customfonts.MyTextView parking = (customfonts.MyTextView) findViewById(R.id.parkingValue);
-                parking.setText(getIntent().getExtras().get("parking").toString());
+                parking.setText(boolToYesNo(getIntent().getExtras().get("parking").toString()));
 
                 customfonts.MyTextView size = (customfonts.MyTextView) findViewById(R.id.size2);
                 size.setText(getIntent().getExtras().get("size").toString());
@@ -424,22 +589,30 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
                 customfonts.MyTextView numRooms = (customfonts.MyTextView) findViewById(R.id.roomsNumValue);
                 numRooms.setText(getIntent().getExtras().get("numRooms").toString());
 
-                customfonts.MyTextView des = (customfonts.MyTextView) findViewById(R.id.descriptionValue);
+                //customfonts.MyTextView des = (customfonts.MyTextView) findViewById(R.id.descriptionValue);
                 //des.setText(getIntent().getExtras().get("description").toString());
 
                 customfonts.MyTextView rank = (customfonts.MyTextView) findViewById(R.id.est);
                 Bundle b = getIntent().getExtras();
-                rank.setText("Ranking: " + getIntent().getExtras().get("averageRank").toString());
+                float f = Float.parseFloat(getIntent().getExtras().get("averageRank").toString());
+                String formattedString = String.format("%.02f", f);
+                rank.setText("Ranking: " + formattedString);
 
                 customfonts.MyTextView rankText = (customfonts.MyTextView) findViewById(R.id.free);
 
-                if (Double.parseDouble(getIntent().getExtras().get("averageRank").toString())<5.0){
+                if (Double.parseDouble(getIntent().getExtras().get("averageRank").toString())<2.0){
                     rankText.setText("Low Ranking");
-                    rankText.setBackgroundResource(R.drawable.rectdvir);
+                    rankText.setBackgroundResource(R.drawable.rectlow);
+                }
+                else{
+                    if (Double.parseDouble(getIntent().getExtras().get("averageRank").toString())<4.0){
+                        rankText.setText("Med Ranking");
+                        rankText.setBackgroundResource(R.drawable.rectdvir);
+                    }
                 }
 
 
-        if (HomeActivity.aparttmentsRatings.get( getIntent().getExtras().getString("address"))!=null) {
+        if (HomeActivity.aparttmentsRatings.get( getIntent().getExtras().getString("address"))!=null && !LoginActivity.isAno) {
             ratingBar.setRating(HomeActivity.aparttmentsRatings.get( getIntent().getExtras().getString("address")));
             ratingBar.setClickable(false);
             ratingBar.setActivated(false);
@@ -448,10 +621,51 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
                 ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(RatingBar ratingBar, float rating,
                                         boolean fromUser) {
+                if(LoginActivity.isAno){
+                    ApartmentActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(ApartmentActivity.this, "You can't rate", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    });
+                    return;
+                }
+
+
+                if (HomeActivity.aparttmentsRatings.get( getIntent().getExtras().getString("address"))!=null){
+                    return;
+                }
+                Boolean check = true;
+                if (getIntent().getExtras().getString("landLordID").equals(LoginActivity.sessionId)) {
+                    check = false;
+
+                    Thread t3 = new Thread(new Runnable() {
+
+                        public void run() {
+                            ApartmentActivity.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(ApartmentActivity.this, "You can't rate your own asset", Toast.LENGTH_SHORT).show();
+                                    ratingBar.setRating(0);
+                                    return;
+                                }
+                            });
+
+                        }
+                    });
+                    try {
+                        t3.start();
+                        t3.join();
+                    } catch (Exception e) {
+                    }
+                }
                 HomeActivity.aparttmentsRatings.put( getIntent().getExtras().getString("address"),new Float (ratingBar.getRating()));
                 ratingBar.setClickable(false);
                 ratingBar.setActivated(false);
                 ratingBar.setEnabled(false);
+
+                if (!check){
+                    return;
+                }
 
 
                 new AsyncTask<Void, Void, Void>() {
@@ -471,7 +685,14 @@ public class ApartmentActivity extends AppCompatActivity implements BaseSliderVi
 
             }});
     }
-
+    private String boolToYesNo(String bool){
+        if (bool.equals("false")){
+            return "No";
+        }
+        else {
+            return  "Yes";
+        }
+    }
 
     @Override
     public void onSliderClick(BaseSliderView slider) {

@@ -23,6 +23,17 @@
         android:background="?android:attr/selectableItemBackground"
         android:layout_gravity="bottom" />
 
+    <Button
+        android:id="@+id/buttonRestart"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="485dp"
+        android:layout_alignParentLeft="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_gravity="bottom" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

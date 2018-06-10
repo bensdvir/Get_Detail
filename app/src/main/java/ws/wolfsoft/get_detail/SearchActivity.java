@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import DataObjects.Apartment;
@@ -42,7 +43,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_layout);
-        final Spinner spinner = (Spinner) findViewById(R.id.rooms_spinner);
+        final Spinner spinnerRoomsTo = (Spinner) findViewById(R.id.rooms_spinnerTo);
         mLocationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);
 
 // Create an ArrayAdapter using the string array and a default spinner layout
@@ -51,8 +52,8 @@ public class SearchActivity extends AppCompatActivity {
 // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerRoomsTo.setAdapter(adapter);
+        spinnerRoomsTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -65,9 +66,9 @@ public class SearchActivity extends AppCompatActivity {
 
         });
 
-        final Spinner spinnerFloor = (Spinner) findViewById(R.id.floor_spinner);
-        spinnerFloor.setAdapter(adapter);
-        spinnerFloor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        final Spinner spinnerFloorTo = (Spinner) findViewById(R.id.floor_spinnerTo);
+        spinnerFloorTo.setAdapter(adapter);
+        spinnerFloorTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -79,6 +80,37 @@ public class SearchActivity extends AppCompatActivity {
             }
 
         });
+
+        final Spinner spinnerFloorFrom = (Spinner) findViewById(R.id.floor_spinnerFrom);
+        spinnerFloorFrom.setAdapter(adapter);
+        spinnerFloorFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
+
+        final Spinner spinnerRoomsFrom= (Spinner) findViewById(R.id.rooms_spinnerFrom);
+        spinnerRoomsFrom.setAdapter(adapter);
+        spinnerRoomsFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
+
 
         Button search_button = (Button) findViewById(R.id.search_button);
         final EditText startSize = (EditText) findViewById(R.id.myEditText3);
@@ -88,6 +120,8 @@ public class SearchActivity extends AppCompatActivity {
         final Switch parking = (Switch) findViewById(R.id.parkingSwitch);
         final Switch warehouse = (Switch) findViewById(R.id.warehouseSwitch);
         final Switch elevator = (Switch) findViewById(R.id.elevatorSwitch);
+        final Switch renting = (Switch) findViewById(R.id.rentingSwitch);
+
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                                                             @Override
@@ -117,19 +151,29 @@ public class SearchActivity extends AppCompatActivity {
                 Bundle bundle = getIntent().getExtras();
                 int numAp = bundle.getInt("apartmentsNum");
                 allResults = new ArrayList<Apartment>();
-                for(int i = 0 ; i < numAp; i ++) {
+                for (HashMap.Entry<String, Apartment> entry : HomeActivity.homeToSearch.entrySet())
+                {
+                    allResults.add(entry.getValue()) ;
+                }
+                HomeActivity.homeToSearch = new HashMap<>();
+                /*for(int i = 0 ; i < numAp; i ++) {
                     Apartment tmp = (Apartment) bundle.get("ap" + i);
                     allResults.add(tmp);
                 }
+                */
                 int startSizeValue = Integer.valueOf(startSize.getText().toString());
                 int startPriceValue = Integer.valueOf(startPrice.getText().toString());
                 int endSizeValue = Integer.valueOf(endSize.getText().toString());
                 int endPriceValue = Integer.valueOf(endPrice.getText().toString());
-                int numFloor =  Integer.valueOf(spinnerFloor.getSelectedItem().toString());
-                int numRooms =  Integer.valueOf(spinner.getSelectedItem().toString());
+                int numFloorFrom =  Integer.valueOf(spinnerFloorFrom.getSelectedItem().toString());
+                int numRoomsFrom =  Integer.valueOf(spinnerRoomsFrom.getSelectedItem().toString());
+                int numFloorTo =  Integer.valueOf(spinnerFloorTo.getSelectedItem().toString());
+                int numRoomsTo =  Integer.valueOf(spinnerRoomsTo.getSelectedItem().toString());
                 final boolean parkingFilter = parking.isChecked();
                 final boolean elevatorFilter = elevator.isChecked();
                 boolean warehouseFilter = warehouse.isChecked();
+                boolean rentingFilter = renting.isChecked();
+
                 Geocoder coder = new Geocoder(SearchActivity.this);
 
 
@@ -183,10 +227,11 @@ public class SearchActivity extends AppCompatActivity {
 
 
                         float distanceInMeters = loc1.distanceTo(loc2)/1000;
-                        if  ( c.getElevator() == elevatorFilter && c.getParking() == parkingFilter
-                                && c.getWareHouse() == warehouseFilter && c.getNumRooms() == numRooms && c.getFloor() == numFloor
-                                &&  c.getSize() > startSizeValue && c.getSize() < endSizeValue
-                                &&  c.getPrice() > startPriceValue && c.getPrice() < endPriceValue && distanceInMeters<30)
+                        if  ( c.getIsRent() == rentingFilter && c.getElevator() == elevatorFilter && c.getParking() == parkingFilter
+                                && c.getWareHouse() == warehouseFilter && c.getNumRooms() <=numRoomsTo && c.getFloor() <= numFloorTo
+                                && c.getNumRooms() >=numRoomsFrom && c.getFloor() >= numFloorFrom
+                                &&  c.getSize() >= startSizeValue && c.getSize() <= endSizeValue
+                                &&  c.getPrice() >= startPriceValue && c.getPrice() <= endPriceValue && distanceInMeters<30)
                             afterFilter.add(c);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -202,10 +247,17 @@ public class SearchActivity extends AppCompatActivity {
                 b.putBoolean("isInSearch",true);
                 int i = 0;
                 for (Apartment ap : afterFilter){
-                    intent.putExtra("ap"+i,ap);
+                    HomeActivity.searchToHome.put("ap"+i,ap);
                     i+=1;
                 }
                 b.putInt("apartmentsNum", afterFilter.size());
+                if(getIntent().getExtras().containsKey("idFacebook")) {
+                    b.putString("idFacebook", getIntent().getExtras().get("idFacebook").toString());
+                }
+                if(getIntent().getExtras().containsKey("idFacebook")) {
+
+                    b.putString("sessionId", getIntent().getExtras().get("idFacebook").toString());
+                }
                 intent.putExtras(b);
                 startActivity(intent);
             }
