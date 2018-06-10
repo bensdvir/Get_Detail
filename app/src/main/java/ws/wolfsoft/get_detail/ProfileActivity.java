@@ -258,6 +258,9 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
         String finalUserID2 = userID;
         String finalUserID5 = userID;
         String finalUserID7 = userID;
+        String finalUserID8 = userID;
+        String finalUserID9 = userID;
+        String finalUserID10 = userID;
         ProfileActivity.this.runOnUiThread(new Runnable() {
             public void run() {
 
@@ -351,6 +354,107 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                 });
 
                 LinearLayout toFavs = (LinearLayout) findViewById(R.id.myFavs);
+                LinearLayout toChat = (LinearLayout) findViewById(R.id.chatLayout);
+
+                LinearLayout blockLayout = (LinearLayout) findViewById(R.id.blockLayout);
+
+
+                blockLayout.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+
+                        if (LoginActivity.isAno) {
+                            ProfileActivity.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(ProfileActivity.this, "You can't block users", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            });
+                            return;
+                        }
+                        if (finalUserID10.equals(LoginActivity.sessionId)) {
+                            Thread t3 = new Thread(new Runnable() {
+
+                                public void run() {
+                                    ProfileActivity.this.runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            Toast.makeText(ProfileActivity.this, "You can't block yourself", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    });
+                                    return;
+                                }
+                            });
+                            try {
+                                t3.start();
+                                t3.join();
+                            } catch (Exception e) {
+                            }
+                        }
+                        else {
+
+                        }
+
+                    }
+                });
+
+                toChat.setOnClickListener(new View.OnClickListener()
+
+                {
+                    @Override
+                    public void onClick (View view) {
+
+                        if (LoginActivity.isAno) {
+                            ProfileActivity.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(ProfileActivity.this, "You can't access chat", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            });
+                            return;
+                        }
+                        if (finalUserID9.equals(LoginActivity.sessionId)) {
+                            Thread t3 = new Thread(new Runnable() {
+
+                                public void run() {
+                                    ProfileActivity.this.runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            Toast.makeText(ProfileActivity.this, "You can't chat yourself", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    });
+                                    return;
+                                }
+                            });
+                            try {
+                                t3.start();
+                                t3.join();
+                            } catch (Exception e) {
+                            }
+                        }
+                       else {
+
+                            // ConversationActivity.show(ProfileActivity.this);
+                            Intent intent = new Intent(getBaseContext(), Chat.class);
+                            UserDetails.chatWith = getIntent().getExtras().get("firstName").toString() + " " + getIntent().getExtras().get("lastName").toString();
+                            //Bundle b = new Bundle();
+                            //b.putString("username",LoginActivity.sessionId);
+                            //b.putString("pass","123456");
+                            //intent.putExtras(b);
+                            startActivity(intent);
+                        }
+                    }
+
+
+                        });
+
+
+
+
+
+
+
+
 
                 //mDemoSlider.addOnPageChangeListener();
                 toFavs.setOnClickListener(new View.OnClickListener()
@@ -529,8 +633,5 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
             rankValue.setText("Unknown");
         }
     }
-
-    
-
 
 }

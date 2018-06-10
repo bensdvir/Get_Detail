@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "355792803483",
+    "firebase_url": "https://finalproject-72668.firebaseio.com",
+    "project_id": "finalproject-72668",
+    "storage_bucket": "finalproject-72668.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:355792803483:android:a9beb938049cb64b",
+        "android_client_info": {
+          "package_name": "ws.wolfsoft.get_detail"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "355792803483-4vilqn7u7ab8v6adilhnep2vg20uiubj.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "355792803483-4vilqn7u7ab8v6adilhnep2vg20uiubj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApHiVy0lMF8YsigBBQWfJpwfrmLCjkmCE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

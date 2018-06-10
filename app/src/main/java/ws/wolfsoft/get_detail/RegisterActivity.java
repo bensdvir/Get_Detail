@@ -29,6 +29,12 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -38,7 +44,9 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.firebase.client.Firebase;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
@@ -143,8 +151,16 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                                 //Bundle b = userToBundle(response);
                                                 if (!response){
                                                     LoginActivity.sessionId = facebookData.get("idFacebook").toString();
+                                                    LoginActivity.username = facebookData.get("first_name").toString() + " "+ facebookData.get("last_name").toString();
                                                     LoginActivity.isAno = false;
                                                     sendToServer(facebookData);
+                                                    new AsyncTask<Void, Void, Void>() {
+                                                        @Override
+                                                        protected Void doInBackground(Void... params) {
+                                                            regToChat();
+                                                            return null;
+                                                        }
+                                                    }.execute();
                                                     startActivity(intent);
                                                 }
                                                 else{
@@ -475,5 +491,53 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
 
     }
+
+    public void regToChat(){
+        Firebase.setAndroidContext(RegisterActivity.this);
+        String user = LoginActivity.username;
+        String pass = "123456";
+
+        String url = "https://finalproject-72668.firebaseio.com//users.json";
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
+            @Override
+            public void onResponse(String s) {
+                Firebase reference = new Firebase("https://finalproject-72668.firebaseio.com//users");
+
+                if(s.equals("null")) {
+                    reference.child(user).child("password").setValue(pass);
+                    Toast.makeText(RegisterActivity.this, "registration successful", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    JSONObject obj = null;
+                    try {
+                        obj = new JSONObject(s);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (!obj.has(user)) {
+                        reference.child(user).child("password").setValue(pass);
+                        Toast.makeText(RegisterActivity.this, "registration successful", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "username already exists", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+            }
+
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println("" + volleyError );
+            }
+        });
+
+        RequestQueue rQueue = Volley.newRequestQueue(RegisterActivity.this);
+        rQueue.add(request);
+
+    }
+
 }
 

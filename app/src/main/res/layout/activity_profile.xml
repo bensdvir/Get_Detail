@@ -383,6 +383,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
+                        android:id="@+id/chatLayout"
 
                         android:layout_marginTop="20dp"
                         >
@@ -406,6 +407,53 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="Start chat"
+                            android:layout_gravity="center"
+                            android:textSize="12dp"
+                            android:textColor="#4c71f5"
+                            />
+                    </LinearLayout>
+
+                    <View
+
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colordevider"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+
+                        />
+
+
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:id="@+id/blockLayout"
+
+                        android:layout_marginTop="20dp"
+                        >
+
+                        <ImageView
+                            android:layout_weight="1"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/block"
+                            android:layout_gravity="center"
+                            android:gravity="bottom"
+
+                            />
+
+
+
+                        <customfonts.MyTextView
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:id="@+id/blockImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Block user"
                             android:layout_gravity="center"
                             android:textSize="12dp"
                             android:textColor="#4c71f5"

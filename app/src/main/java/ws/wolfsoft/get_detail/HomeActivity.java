@@ -21,6 +21,12 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,6 +36,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,6 +87,73 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
         map.getMapAsync(this);
         final Button locButton = (Button) findViewById(R.id.buttonLoc);
         final Button resButton = (Button) findViewById(R.id.buttonRestart);
+        final Button chatButton = (Button) findViewById(R.id.buttonChat);
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+
+                        if(LoginActivity.isAno){
+                            HomeActivity.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(HomeActivity.this, "You can't access chat", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            });
+                            return null;
+                        }
+
+
+
+                        String url = "https://finalproject-72668.firebaseio.com/users.json";
+                        String user = LoginActivity.username;
+                        UserDetails.username = user;
+                        UserDetails.password = "123456";
+                        String pass = "123456";
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
+            @Override
+            public void onResponse(String s) {
+                    try {
+                        JSONObject obj = null;
+                        try {
+                            obj = new JSONObject(s);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        if(!obj.has(user)){
+                            Toast.makeText(HomeActivity.this, "user not found", Toast.LENGTH_LONG).show();
+                        }
+                        else if(obj.getJSONObject(user).getString("password").equals(pass)){
+                            UserDetails.username = user;
+                            UserDetails.password = pass;
+                            startActivity(new Intent(HomeActivity.this, Users.class));    //for all users
+                        }
+                        else {
+                            Toast.makeText(HomeActivity.this, "incorrect password", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println("" + volleyError);
+            }
+        });
+
+        RequestQueue rQueue = Volley.newRequestQueue(HomeActivity.this);
+        rQueue.add(request);
+                        return null;
+                    }
+                }.execute();
+            }
+        });
+
 
         locButton.setBackgroundResource(R.drawable.loc_black);
         resButton.setBackgroundResource(R.drawable.res_button);
@@ -182,6 +258,9 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
             {
                 @Override
                 public void onClick (View view){
+                   // ConversationActivity.show(HomeActivity.this);
+
+
                 Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
                 Bundle facebookData = getIntent().getExtras();
                 facebookData.putString("isProfile","yes");
@@ -362,7 +441,6 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
             }
             if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
                 // Found best last known location: %s", l);
-
                 bestLocation = l;
             }
         }

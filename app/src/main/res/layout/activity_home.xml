@@ -59,18 +59,18 @@
 
 
 
-    <!--
+
     <Button
-        android:layout_weight="1"
+        android:id="@+id/buttonChat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/cart" />
-    </Button>
-    -->
+        android:layout_height="40dp"
+        android:layout_marginBottom="0dp"
+        android:layout_alignParentBottom="true"
+        android:text="Go to chat"
+        android:fontFamily="casual"
+        android:background="@color/cardview_light_background"
+        android:layout_gravity="bottom" />
+
 
 
 

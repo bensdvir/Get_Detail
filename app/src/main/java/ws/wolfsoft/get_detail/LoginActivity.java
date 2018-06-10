@@ -66,6 +66,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
     public static String sessionId ;
+    public static String username ;
+
     public static  boolean isAno = false;
 
     /**
@@ -153,6 +155,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                                     if (response){
                                                         LoginActivity.isAno = false;
                                                         sessionId = facebookData.get("idFacebook").toString();
+                                                        username = facebookData.get("first_name").toString() + " "+ facebookData.get("last_name").toString();
+
                                                         startActivity(intent);
                                                     }
                                                     else{
