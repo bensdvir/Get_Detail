@@ -7,14 +7,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <application
         android:allowBackup="true"
-        android:largeHeap="true"
         android:icon="@drawable/apartment"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
-        android:name="org.glucosio.android.GlucosioApplication"
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -63,12 +61,13 @@
         <activity android:name=".ProfileActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".AddApartmentActivity" />
-        <activity android:name=".FavouritesActivity"></activity>
-        <activity android:name=".Chat"></activity>
-        <activity android:name=".Users"></activity>
+        <activity android:name=".FavouritesActivity" />
+        <activity android:name=".Chat" />
+        <activity android:name=".Users" />
+        <activity android:name=".CatSearchActivity"
+        android:theme="@style/mytheme" />
 
-    </application>
-
+        </application>
 
 
 </manifest>

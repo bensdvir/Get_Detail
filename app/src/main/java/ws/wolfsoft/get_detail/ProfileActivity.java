@@ -261,6 +261,7 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
         String finalUserID8 = userID;
         String finalUserID9 = userID;
         String finalUserID10 = userID;
+        String finalUserID11 = userID;
         ProfileActivity.this.runOnUiThread(new Runnable() {
             public void run() {
 
@@ -393,6 +394,106 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                         }
                         else {
 
+
+                            final CharSequence[] items = {" block for posts "," block chat messages "};
+// arraylist to keep the selected items
+                            final ArrayList seletedItems=new ArrayList();
+
+                            AlertDialog dialog = new AlertDialog.Builder(ProfileActivity.this)
+                                    .setTitle("Select blocking option")
+                                    .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                                            if (isChecked) {
+                                                // If the user checked the item, add it to the selected items
+                                                seletedItems.add(indexSelected);
+                                            } else if (seletedItems.contains(indexSelected)) {
+                                                // Else, if the item is already in the array, remove it
+                                                seletedItems.remove(Integer.valueOf(indexSelected));
+                                            }
+                                        }
+                                    }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            boolean conPosts = seletedItems.contains(new Integer(0));
+                                            boolean conChat= seletedItems.contains(new Integer(1));
+                                            if (conPosts){
+
+                                                new AsyncTask<Void, Void, Void>() {
+                                                    @Override
+                                                    protected Void doInBackground(Void... params) {
+
+                                                        HashMap<String, String> header = new HashMap<String, String>();
+                                                        header.put("myToken", LoginActivity.sessionId);
+                                                        header.put("blockToken", finalUserID11);
+                                                        Boolean response = Communication.makePostRequest(Communication.ip + "/user/blockApartmentUser", header, null,Boolean.class);
+                                                        if (response) {
+                                                            ProfileActivity.this.runOnUiThread(new Runnable() {
+                                                                public void run() {
+                                                                    Toast.makeText(ProfileActivity.this, "user blocked for posts successfully :)", Toast.LENGTH_SHORT).show();
+                                                                    return;
+                                                                }
+                                                            });
+                                                        }
+                                                        else {
+                                                            ProfileActivity.this.runOnUiThread(new Runnable() {
+                                                                public void run() {
+                                                                    Toast.makeText(ProfileActivity.this, "user address already exists in posts blocked list ", Toast.LENGTH_SHORT).show();
+                                                                    return;
+                                                                }
+                                                            });
+                                                        }
+
+
+                                                        return null;
+                                                    }
+                                                }.execute();
+
+
+                                            }
+                                            if (conChat){
+                                                new AsyncTask<Void, Void, Void>() {
+                                                    @Override
+                                                    protected Void doInBackground(Void... params) {
+
+                                                        HashMap<String, String> header = new HashMap<String, String>();
+                                                        header.put("myToken", LoginActivity.sessionId);
+                                                        header.put("blockToken", finalUserID11);
+                                                        Boolean response = Communication.makePostRequest(Communication.ip + "/user/blockChatUser", header, null,Boolean.class);
+                                                        if (response) {
+                                                            ProfileActivity.this.runOnUiThread(new Runnable() {
+                                                                public void run() {
+                                                                    Toast.makeText(ProfileActivity.this, "user blocked for chat successfully :)", Toast.LENGTH_SHORT).show();
+                                                                    return;
+                                                                }
+                                                            });
+                                                        }
+                                                        else {
+                                                            ProfileActivity.this.runOnUiThread(new Runnable() {
+                                                                public void run() {
+                                                                    Toast.makeText(ProfileActivity.this, "user address already exists in chat blocked list ", Toast.LENGTH_SHORT).show();
+                                                                    return;
+                                                                }
+                                                            });
+                                                        }
+
+
+                                                        return null;
+                                                    }
+                                                }.execute();
+                                            }
+
+                                            //  Your code when user clicked on OK
+                                            //  You can write the code  to save the selected item here
+                                        }
+                                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            //  Your code when user clicked on Cancel
+                                        }
+                                    }).create();
+                            dialog.show();
+
                         }
 
                     }
@@ -434,14 +535,50 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                         }
                        else {
 
+                            new AsyncTask<Void, Void, Void>() {
+                                @Override
+                                protected Void doInBackground(Void... params) {
+                                    HashMap<String, String> header = new HashMap<String, String>();
+                                    header.put("myToken", LoginActivity.sessionId);
+                                    header.put("blockToken", finalUserID11);
+                                    Boolean response = Communication.makePostRequest(Communication.ip + "/user/isBlockForChat", header, null,Boolean.class);
+                                    if (response){
+                                        ProfileActivity.this.runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                Toast.makeText(ProfileActivity.this, "You blocked this user", Toast.LENGTH_SHORT).show();
+                                                return;
+                                            }
+                                        });
+                                        return null;
+                                    }
+                                    else{
+                                        header = new HashMap<String, String>();
+                                        header.put("myToken", finalUserID11);
+                                        header.put("blockToken", LoginActivity.sessionId);
+                                        Boolean response2 = Communication.makePostRequest(Communication.ip + "/user/isBlockForChat", header, null,Boolean.class);
+                                        if (response2){
+                                            ProfileActivity.this.runOnUiThread(new Runnable() {
+                                                public void run() {
+                                                    Toast.makeText(ProfileActivity.this, "You are blocked by this user", Toast.LENGTH_SHORT).show();
+                                                    return;
+                                                }
+                                            });
+                                            return null;
+                                        }
+                                        else{
+                                            Intent intent = new Intent(getBaseContext(), Chat.class);
+                                            UserDetails.chatWith = getIntent().getExtras().get("firstName").toString() + " " + getIntent().getExtras().get("lastName").toString();
+                                            startActivity(intent);
+                                        }
+
+                                    }
+                                    return null;
+                                }
+                                }.execute();
+
+
                             // ConversationActivity.show(ProfileActivity.this);
-                            Intent intent = new Intent(getBaseContext(), Chat.class);
-                            UserDetails.chatWith = getIntent().getExtras().get("firstName").toString() + " " + getIntent().getExtras().get("lastName").toString();
-                            //Bundle b = new Bundle();
-                            //b.putString("username",LoginActivity.sessionId);
-                            //b.putString("pass","123456");
-                            //intent.putExtras(b);
-                            startActivity(intent);
+
                         }
                     }
 

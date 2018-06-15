@@ -107,6 +107,26 @@ public class Communication {
         });
     }
 
+    public static <T> T makeGetRequestGetString(String request, Map<String, String> headers) {
+        return makeRequest(request, headers, "GET", new Action() {
+            @Override
+            public String doRequest() throws IOException {
+                return getString();
+            }
+        });
+    }
+    public static String getString(){
+        String returnVal = null;
+        try {
+            InputStream response = con.getInputStream();
+            returnVal = convertStreamToString(response);
+        } catch(  Exception e) {
+            log.warning("get json object FAIL" + e);
+        }
+        return returnVal;
+
+    }
+
     public static <T> List<T> makeGetRequestGetList(String request, Map<String, String> headers, final Class<T> myClass) {
         return makeRequest(request, headers, "GET", new Action() {
             @Override

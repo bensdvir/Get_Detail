@@ -5,6 +5,7 @@ package ws.wolfsoft.get_detail;
  */
         import android.app.ProgressDialog;
         import android.content.Intent;
+        import android.os.AsyncTask;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.view.View;
@@ -12,6 +13,7 @@ package ws.wolfsoft.get_detail;
         import android.widget.ArrayAdapter;
         import android.widget.ListView;
         import android.widget.TextView;
+        import android.widget.Toast;
 
         import com.android.volley.Request;
         import com.android.volley.RequestQueue;
@@ -24,7 +26,10 @@ package ws.wolfsoft.get_detail;
         import org.json.JSONObject;
 
         import java.util.ArrayList;
+        import java.util.HashMap;
         import java.util.Iterator;
+
+        import Communication.Communication;
 
 public class Users extends AppCompatActivity {
     ListView usersList;
@@ -65,8 +70,62 @@ public class Users extends AppCompatActivity {
         usersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                UserDetails.chatWith = al.get(position);
-                startActivity(new Intent(Users.this, Chat.class));
+
+
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        HashMap<String, String> header = new HashMap<String, String>();
+                        header.put("userName", al.get(position));
+                        String token = Communication.makeGetRequestGetString(Communication.ip + "/user/getTokenByUserName", header);
+                        if (token.equals("")) {
+                            UserDetails.chatWith = al.get(position);
+                            startActivity(new Intent(Users.this, Chat.class));
+                        }
+                        else{
+                        header = new HashMap<String, String>();
+                        header.put("myToken", LoginActivity.sessionId);
+                        header.put("blockToken", token);
+                        Boolean response = Communication.makePostRequest(Communication.ip + "/user/isBlockForChat", header, null, Boolean.class);
+                        if (response) {
+                            Users.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(Users.this, "You blocked this user", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            });
+                            return null;
+                        } else {
+                            header = new HashMap<String, String>();
+                            header.put("myToken", token);
+                            header.put("blockToken", LoginActivity.sessionId);
+                            Boolean response2 = Communication.makePostRequest(Communication.ip + "/user/isBlockForChat", header, null, Boolean.class);
+                            if (response2) {
+                                Users.this.runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(Users.this, "You are blocked by this user", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                });
+                                return null;
+                            } else {
+
+                                UserDetails.chatWith = al.get(position);
+                                startActivity(new Intent(Users.this, Chat.class));
+                            }
+                        }
+                    }
+                        return null;
+                    }
+                }.execute();
+
+
+
+
+
+
+
+
             }
         });
     }

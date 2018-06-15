@@ -506,7 +506,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
                 if(s.equals("null")) {
                     reference.child(user).child("password").setValue(pass);
-                    Toast.makeText(RegisterActivity.this, "registration successful", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(RegisterActivity.this, "registration successful", Toast.LENGTH_LONG).show();
                 }
                 else {
                     JSONObject obj = null;
@@ -518,9 +518,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
                     if (!obj.has(user)) {
                         reference.child(user).child("password").setValue(pass);
-                        Toast.makeText(RegisterActivity.this, "registration successful", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(RegisterActivity.this, "registration successful", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(RegisterActivity.this, "username already exists", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(RegisterActivity.this, "username already exists", Toast.LENGTH_LONG).show();
                     }
 
                 }

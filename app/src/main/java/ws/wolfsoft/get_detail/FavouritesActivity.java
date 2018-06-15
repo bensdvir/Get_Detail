@@ -5,8 +5,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
@@ -39,6 +41,9 @@ public class FavouritesActivity extends AppCompatActivity implements BaseSliderV
         TextView address = (TextView) findViewById(R.id.address);
         isReady = false;
         emptyFavs = false;
+        Button deleteButton = (Button) findViewById(R.id.delete_button);
+        deleteButton.setVisibility (View.INVISIBLE);
+        deleteButton.setClickable(false);
 
 
         FavouritesActivity.this.runOnUiThread(new Runnable() {
@@ -175,6 +180,21 @@ public class FavouritesActivity extends AppCompatActivity implements BaseSliderV
                 });
                 if (response.isEmpty()){
                     emptyFavs = true;
+                    FavouritesActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            address.setText("No apartments to show :(");
+                        }
+                    });
+
+                }
+                else{
+
+                    FavouritesActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            deleteButton.setVisibility (View.VISIBLE);
+                            deleteButton.setClickable(true);
+                        }
+                    });
                 }
 
                 isReady =true;
@@ -220,6 +240,47 @@ public class FavouritesActivity extends AppCompatActivity implements BaseSliderV
         thread.start();
 
 
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDemoSlider = (SliderLayout) findViewById(R.id.slider);
+                BaseSliderView slider = mDemoSlider.getCurrentSlider();
+                String ad = slider.getDescription().replace(".jpg","");
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        HashMap<String, String> header = new HashMap<String, String>();
+                        header.put("token", LoginActivity.sessionId);
+                        header.put("address", ad);
+                        Boolean response = Communication.makePostRequest(Communication.ip + "/user/deleteFromWishList", header, null ,Boolean.class);
+                        if (response){
+                            FavouritesActivity.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(FavouritesActivity.this, "apartment deleted successfully", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            });
+                            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+                            finish();
+                            startActivity(getIntent());
+                        }
+                        else {
+                            FavouritesActivity.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(FavouritesActivity.this, "some bug", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            });
+
+                        }
+                        return null;
+                    }
+                }.execute();
+
+
+            }
+        });
     }
 
     @Override

@@ -231,7 +231,7 @@ public class SearchActivity extends AppCompatActivity {
                                 && c.getWareHouse() == warehouseFilter && c.getNumRooms() <=numRoomsTo && c.getFloor() <= numFloorTo
                                 && c.getNumRooms() >=numRoomsFrom && c.getFloor() >= numFloorFrom
                                 &&  c.getSize() >= startSizeValue && c.getSize() <= endSizeValue
-                                &&  c.getPrice() >= startPriceValue && c.getPrice() <= endPriceValue && distanceInMeters<30)
+                                &&  c.getPrice() >= startPriceValue && c.getPrice() <= endPriceValue && distanceInMeters<500)
                             afterFilter.add(c);
                     } catch (IOException e) {
                         e.printStackTrace();

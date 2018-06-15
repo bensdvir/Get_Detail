@@ -221,18 +221,27 @@ public class AddApartmentActivity extends AppCompatActivity {
                         HomeActivity.tmpImage = image;
                         //header.put("userID",getIntent().getExtras().getString("landLordID"));
                         //header.put("userID",LoginActivity.sessionId);
-                        int i = Communication.makePostRequestGetCode(Communication.ip + "/apartment/addNew", header, ap);
-                        int k = i;
-                        AddApartmentActivity.this.runOnUiThread(new Runnable() {
-                            public void run() {
-                                Toast.makeText(AddApartmentActivity.this, "Apartment added successfully :)", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        });
+                        Boolean response = Communication.makePostRequest(Communication.ip + "/apartment/addNew", header, ap,Boolean.class);
+                       if (!response) {
+                           AddApartmentActivity.this.runOnUiThread(new Runnable() {
+                               public void run() {
+                                   Toast.makeText(AddApartmentActivity.this, "Apartment added successfully :)", Toast.LENGTH_SHORT).show();
+                                   return;
+                               }
+                           });
+                           finish();
+                       }
+                       else {
+                           AddApartmentActivity.this.runOnUiThread(new Runnable() {
+                               public void run() {
+                                   Toast.makeText(AddApartmentActivity.this, "Apartment address already exists ", Toast.LENGTH_SHORT).show();
+                                   return;
+                               }
+                           });
+                       }
                         return null;
                     }
                 }.execute();
-                finish();
             }});
 
 

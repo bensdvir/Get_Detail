@@ -157,6 +157,51 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
 
         locButton.setBackgroundResource(R.drawable.loc_black);
         resButton.setBackgroundResource(R.drawable.res_button);
+
+
+
+        final Button fastSearch = (Button) findViewById(R.id.buttonCatSearch);
+        fastSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        Intent intent = new Intent(HomeActivity.this,CatSearchActivity.class);
+                        Bundle bundle = new Bundle();
+                        int i = 0;
+                        for (Apartment ap : ans) {
+                            homeToSearch.put("ap"+i,ap);
+                            //intent.putExtra("ap" + i, ap);
+                            i += 1;
+                        }
+                        bundle.putInt("apartmentsNum", homeToSearch.size());
+                        if(getIntent().getExtras().containsKey("idFacebook")) {
+                            bundle.putString("idFacebook", getIntent().getExtras().get("idFacebook").toString());
+                        }
+                        if(getIntent().getExtras().containsKey("idFacebook")) {
+                            bundle.putString("sessionId", getIntent().getExtras().get("idFacebook").toString());
+                        }
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+
+
+
+
+                        /////////////
+
+
+
+                        /////////////////////////////////////////////////////////////////////////
+
+                        return null;
+                    }
+                }.execute();
+            }
+        });
+
+
+
         resButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,7 +211,17 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
                         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
                         getIntent().removeExtra("isInSearch");
                         finish();
-                startActivity(getIntent());
+                        startActivity(getIntent());
+
+
+
+
+                        /////////////
+
+
+
+                        /////////////////////////////////////////////////////////////////////////
+
                         return null;
                     }
                 }.execute();
@@ -421,6 +476,12 @@ public class HomeActivity extends AppCompatActivity  implements OnMapReadyCallba
             @Override
             protected List<Apartment> doInBackground(Void... params) {
                 HashMap<String,String> header = new HashMap<String,String>();
+                if (!LoginActivity.isAno) {
+                    header.put("token", LoginActivity.sessionId);
+                }
+                else {
+                    header.put("token", "null");
+                }
                 //header.put("token",getIntent().getExtras().get("idFacebook").toString());
                 List<Apartment> response = Communication.makeGetRequestGetList(Communication.ip+"/apartment/getAll", header, Apartment.class);
                 ans = response;//
